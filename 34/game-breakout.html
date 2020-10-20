@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+      }
+      
+      .box {
+        height: 600px;
+        width: 610px;
+        border: 1px solid #fff;
+        margin: 150px auto;
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;        
+      }
+      .brick {
+        width: 90px;
+        height: 15px;
+        margin: 5px;   
+        margin-right: 5px;     
+        background-color: transparent;
+        outline: 1px solid #fff;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        
+      }
+      
+      .ball {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #fff;
+        position: absolute;        
+        left: 300px;
+        top:560px;
+
+      }
+      .bat {
+        width: 100px;
+        height: 10px;        
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        left: 250px;
+      }
+      .score{
+        position: absolute;
+        bottom: 100px;
+        right: -200px;
+        /* color: #fff;
+        font-size: 4rem;
+        font-family: 'Playfair Display', serif; */
+      }
+      span{
+        color: #fff;
+        font-size: 4rem;
+        font-family: 'Playfair Display', serif;
+      }
+    </style>
+  </head>
+  <body>    
+    <div class="box"></div>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script> 
+      const init =()=>{
+        let display = `<div class="score"><span class="score1"></span></div>`;
+          for (let i = 0; i < 60; i++) {
+          display += `<div class="brick"></div>`;
+          }
+        display += `<div class="ball"></div><div class="bat"></div>`;
+        $(".box").html(display);
+      }     
+      init();
+    
+      const touch = (node1,node2)=>{
+          let l1 = node1.offsetLeft
+          let r1 = node1.offsetLeft + node1.offsetWidth
+          let t1 = node1.offsetTop
+          let b1 = node1.offsetTop  + node1.offsetHeight
+
+          let l2 = node2.offsetLeft
+          let r2 = node2.offsetLeft + node2.offsetWidth
+          let t2 = node2.offsetTop
+          let b2 = node2.offsetTop  + node2.offsetHeight
+
+          if(l2>r1 || r2<l1 || t2>b1 || b2<t1){
+            return false
+          }else{
+            return true
+          }
+        }
+        const ball = document.querySelector('.ball')
+        const bat = document.querySelector('.bat')
+        const bricks = [...document.querySelectorAll('.brick')]
+        const brick = document.querySelector('.brick')
+        let speedX = parseInt(Math.random() * 4) + 3;
+        let speedY = parseInt(Math.random() * 3) + 5; 
+        // let brickBottom =
+        //   $("div:nth-of-type(24)").position().top +
+        //   $("div:nth-of-type(24)").outerHeight();
+        const brickPosition = ()=>{bricks.forEach(function(e){
+          e.style.left = e.offsetLeft + 'px'
+          e.style.top = e.offsetTop + 'px'            
+         })}
+         brickPosition()
+
+        const brickStay = ()=>{
+        bricks.forEach(function(e){
+          e.style.position = 'absolute'            
+         })}
+         brickStay()
+         let score = 1
+        const ballRolling = ()=>{
+          setInterval(function () {          
+          $(".ball").css("left", $(".ball").position().left + speedX + "px");
+          
+          $(".ball").css("top", $(".ball").position().top + speedY + "px");
+
+          if (parseInt($(".ball").css("left")) >= 590 || parseInt($(".ball").css("left")) < 0 ) {
+            speedX *= -1;         
+          }
+          if (parseInt($(".ball").css("top")) < 0) speedY *= -1
+            // parseInt($(".ball").css("top")) < brickBottom
+          
+          if (parseInt($(".ball").css("top")) >= 572 ) location.reload()           
+
+          //bat touch
+          if(touch(ball,bat)) speedY*=-1 
+          // bricks touch
+          for(let i=0;i<bricks.length;i++){
+            if(touch(bricks[i],ball)) {
+            speedY*=-1
+            $('.score1').html(score++)
+            document.querySelector('.box').removeChild(bricks[i])
+            break;            
+          }}
+
+          $('.ball').css('background','hsla('+H+',100%,70%,1)');},40);
+          var H = 0;
+          setInterval(function() {
+            if(H <= 360) {H++;}
+            else {H = 0;}
+          // bricks.forEach(function(e){
+          //   if(touch(e,ball)) speedY*=-1
+            
+          // })
+          
+          // $('.brick').each(function(e){
+          //   if(touch(e,ball)) speedY*=-1
+          // })
+        }, 30)};
+        ballRolling()
+
+        const batMoving = ()=>{
+        $(document).hover(function(e){
+          let offsetX = e.pageX - $('.bat').position().left 
+          // console.log(e.pageX)
+          $(document).mousemove(function(e){  
+            // console.log(e.pageX)
+            let l = e.pageX - offsetX
+            if(l<=0)l=0
+            if(l>=510)l=510            
+                     
+            $('.bat').css('left', l +'px')
+          })          
+        })};
+        batMoving();
+
+        
+
+        // let bat = document.querySelector('.bat')
+        // const drag = node =>{
+        //   node.onmousedown = function(e){
+        //     // let e = ev || window.event;
+        //     let offsetX = e.clientX - node.offsetX
+        //     console.log(e.clientX)
+        //   document.onmousemove=function(e){
+        //     // let e = ev || window.event;
+        //     let l = e.client -offsetX
+        //     if(l<=0)l=0
+        //     if(l>=500)l=500
+        //     node.style.left = l +'px'
+        //   }}
+
+        //   document.onmouseup=function(){
+        //     document.onmousemove= null
+        // }};
+        // drag(bat);    
+    </script>
+  </body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>撲克牌梭哈DEMO</title>
+    <style>
+        * {
+            font-family: "Noto Sans TC", sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            height: 130vh;
+        }
+        
+        .brand {
+            width: 105px;
+            height: 150px;
+            float: center;
+            margin: 25px 25px;
+            transition: all 0.5s;
+        }
+        
+        .brandBack {
+            transform: rotateY(360deg);
+            transition: all 0.3s;
+        }
+        
+        .row-a {
+            width: 900px;
+            height: 550px;
+            background-color: rgb(197, 221, 203);
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            border-radius: 30px;
+            box-shadow: 2px 2px 15px 15px #2929295e inset;
+        }
+        /* 莊家按鈕位置 */
+        
+        .top {
+            width: 100%;
+            height: 30px;
+            margin-top: 30px;
+            padding-top: 35px;
+            padding-bottom: 20px;
+        }
+        /* 玩家按鈕位置 */
+        
+        .top2 {
+            width: 100%;
+            height: 30px;
+            margin-top: 400px;
+            position: absolute;
+        }
+        
+        .row-b {
+            flex-direction: row;
+            width: 900px;
+            height: 150px;
+            margin: 20px auto 50px;
+        }
+        
+        #new_post11 {
+            width: 860px;
+            height: 150px;
+            padding: 20px 20px;
+            background: rgb(238, 229, 106);
+            display: none;
+        }
+        
+        #new_post22 {
+            width: 860px;
+            height: 640px;
+            padding: 20px 20px;
+            margin-bottom: 50px;
+            background: rgb(238, 229, 106);
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row-a">
+            <div class="top mx-auto">
+                <input type="text" name="" id="value1" value="5" hidden />
+                <button id="start1" onclick="getValue()">--梭哈--莊家發牌--</button>
+                <div id="poker1"></div>
+            </div>
+
+            <div class="top2 mx-auto">
+                <div id="poker2"></div>
+                <input type="text" name="" id="value2" value="5" hidden />
+                <button id="start2" onclick="getValue2()">--玩家發牌--</button>
+                <span>你可以滑鼠逐一點牌，或者按</span>
+                <button onclick="openAllCards()">全部開牌</button>
+                <button onclick="javascript:window.location.reload()">
+            重新洗牌
+          </button>
+            </div>
+        </div>
+        <div class="row-b">
+            <input type="button" id="button11" value="按我看比牌規則" />
+            <input type="button" id="button22" value="按我看各類牌型與強碰比牌" />
+            <div id="new_post11">
+                比牌規則
+                <hr /> １．牌型：同花順＞鐵支＞葫蘆＞同花＞順子＞三條＞兩對＞對子＞烏龍
+                <br /> ２．牌點數：Ａ＞Ｋ＞Ｑ＞Ｊ＞１０＞９＞８ <br /> ３．花色：黑桃＞紅桃＞方片＞草花 <br /> ４．先比牌型大小，牌型相同再比點數大小，連點數皆同則比較花色大小
+            </div>
+
+            <div id="new_post22">
+                各類牌型與強碰比牌
+                <hr /> 同花順：同一種花色的順子 <br /> 　　　強碰時，比較5張牌中最大的牌點數，如果又全相同相同，比較花色
+                <br /> 鐵支：有四張點數相同的牌 <br /> 　　　強碰時，比較四張大小一樣的牌的牌點數
+                <br />葫蘆：三張點數一樣的牌外加一個對子<br /> 　　　強碰時，比較三張大小一樣的牌的牌點數
+                <br />同花：具有相同花色的五張牌<br />　　　強碰時，比較最大的牌點數，如果相同，比較第二大的牌的牌點數，以此類推，若都相同，<br />　　　則比較花色
+                <br />順子：五張點數相連的牌（8和A不算相連）<br />　　　強碰時，比較最大的牌點數，如果相同，比較最大的牌的花色
+                <br />三條：有三張點數相同的牌，另外兩張為散牌<br />　　　強碰時，比較三張大小一樣的牌的牌點數
+                <br />兩對：有兩個對子，另一個為散牌<br />　　　強碰時，比較兩對中較大對子的大小，若相同，比較較小對子的大小，<br />　　　若還相同，比較單張牌的大小，若還相同，比較最大對子中的最大花色
+                <br />對子：有兩張相同點數的牌<br />　　　強碰時，比較兩張大小一樣的牌的牌點數，若相同，按照由大到小的次序，依次比較剩餘的<br />　　　三張牌大小；若大小都相同，比較對子中最大的花色<br />烏龍：五張散牌，不成任何其他牌型<br />　　　強碰時，比較最大一張牌的點數大小，如果相同，比較第二大的牌的牌點數，如果五張牌的牌點數<br />　　　都相同，比較最大牌的花色
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isBankerDone = false;
+        var chars = [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+        ];
+
+        //每張牌的路徑,brands下標對應A-K(13張)
+        var brands = [
+            "img/1.jpg",
+            "img/2.jpg",
+            "img/3.jpg",
+            "img/4.jpg",
+            "img/5.jpg",
+            "img/6.jpg",
+            "img/7.jpg",
+            "img/8.jpg",
+            "img/9.jpg",
+            "img/10.jpg",
+            "img/11.jpg",
+            "img/12.jpg",
+            "img/13.jpg",
+            "img/14.jpg",
+            "img/15.jpg",
+            "img/16.jpg",
+            "img/17.jpg",
+            "img/18.jpg",
+            "img/19.jpg",
+            "img/20.jpg",
+            "img/21.jpg",
+            "img/22.jpg",
+            "img/23.jpg",
+            "img/24.jpg",
+            "img/25.jpg",
+            "img/26.jpg",
+            "img/27.jpg",
+            "img/28.jpg",
+            "img/29.jpg",
+            "img/30.jpg",
+            "img/31.jpg",
+            "img/32.jpg",
+            "img/33.jpg",
+            "img/34.jpg",
+            "img/35.jpg",
+            "img/36.jpg",
+            "img/37.jpg",
+            "img/38.jpg",
+            "img/39.jpg",
+            "img/40.jpg",
+            "img/41.jpg",
+            "img/42.jpg",
+            "img/43.jpg",
+            "img/44.jpg",
+            "img/45.jpg",
+            "img/46.jpg",
+            "img/47.jpg",
+            "img/48.jpg",
+            "img/49.jpg",
+            "img/50.jpg",
+            "img/51.jpg",
+            "img/52.jpg",
+        ];
+
+        //莊家出牌
+
+        var back1 = "img/back.jpg";
+        var poker = document.getElementById("poker1");
+
+        function generateMixed() {
+            var id = Math.floor(Math.random() * 52) + 1;
+            return id;
+        }
+
+        function createBrand(n) {
+            for (var i = 0; i < n; i++) {
+                var img = document.createElement("img");
+                var num = generateMixed();
+                var imgSrc = brands[num - 1];
+                img.setAttribute("src", back1);
+                img.setAttribute("alt", "撲克");
+                img.setAttribute("index", imgSrc);
+                img.setAttribute("class", "brand");
+                img.setAttribute("row", chars[num - 1]);
+                img.onclick = function() {
+                    turn(this);
+                };
+                poker.appendChild(img);
+            }
+        }
+
+        //莊家--設定要發幾張牌，已經固定為5張
+        function getValue() {
+            var value = document.getElementById("value1");
+            createBrand(value.value);
+            document.getElementById("start1").onclick = null;
+            isBankerDone = true;
+        }
+        //滑鼠點擊開牌
+        function turn(element) {
+            element.setAttribute("class", "brand brandBack");
+            element.setAttribute("src", element.getAttribute("index"));
+        }
+
+        //玩家--設定要發幾張牌，已經固定為5張
+        function getValue2() {
+            if (isBankerDone) {
+                var value = document.getElementById("value2");
+                createBrand(value.value);
+                document.getElementById("start2").onclick = null;
+            } else {}
+        }
+        //翻起全部牌
+        function openAllCards() {
+            var brandsList = poker.getElementsByTagName("img");
+            for (var i = 0; i < brandsList.length; i++) {
+                brandsList[i].setAttribute("class", "brand brandBack");
+                brandsList[i].setAttribute(
+                    "src",
+                    brandsList[i].getAttribute("index")
+                );
+                brandsList[i].onmouseout = function() {
+                    flopBack(this);
+                };
+            }
+        }
+
+        var button11 = document.getElementById("button11");
+
+        button11.onclick = function() {
+            var div = document.getElementById("new_post11");
+            if (div.style.display != "none") {
+                div.style.display = "none";
+            } else {
+                div.style.display = "block";
+            }
+        };
+
+        var button22 = document.getElementById("button22");
+
+        button22.onclick = function() {
+            var div = document.getElementById("new_post22");
+            if (div.style.display != "none") {
+                div.style.display = "none";
+            } else {
+                div.style.display = "block";
+            }
+        };
+    </script>
+</body>
+
+</html>

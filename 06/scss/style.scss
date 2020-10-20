@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 1em;
+    padding: 5.25rem;
+}
+
+.container {
+    max-width: 960px;
+
+    h1 {
+        font-weight: bold;
+        font-size: 2.5rem;
+        color: rgb(32, 64, 86);
+    }
+
+    h4 {
+        font-weight: bold;
+    }
+
+    p {
+        color: rgb(74, 74, 74);
+    }
+}
+
+.card {
+    display: flex;
+    width: 10rem;
+    height: 10rem;
+    background-color: rgb(32, 64, 86);
+    color: rgb(255, 255, 255);
+    border: 4px solid #fff;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 10rem;
+    text-align: center;
+    line-height: 10rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

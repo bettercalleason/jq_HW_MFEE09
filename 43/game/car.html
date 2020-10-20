@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <title>race</title>
+    <style>
+      body {
+        height: 100%;
+        width: 100%;
+        padding: 30px;
+        background-color: #65b1c49b;
+        background-size: cover;
+
+        /* opacity: 0.5; */
+      }
+
+      .container {
+        position: relative;
+        height: 80vh;
+        width: 20%;
+        left: 5%;
+        margin-top: 20px;
+        background-color: #666565;
+        overflow: hidden;
+        /* z-index: 2; */
+      }
+
+      .line {
+        position: absolute;
+        height: 150px;
+        width: 4%;
+        margin-left: 45%;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      #score_box {
+        position: absolute;
+        margin-top: 20%;
+        margin-left: 10%;
+        font-size: 35px;
+        background-color: white;
+        color: #454545;
+        padding: 10px;
+        box-shadow: 4px 4px 0px 1px #808080;
+        z-index: 3;
+      }
+
+      #restart_box {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: #292929;
+        color: white;
+        font-size: 40px;
+        text-align: center;
+        display: none;
+        z-index: 2;
+      }
+
+      #restart {
+        border: none;
+        padding: 25px;
+        color: white;
+        background-color: #3d9cc2;
+        font-size: 30px;
+        margin-top: 30%;
+      }
+      /* 線動 看起來才有動態感 */
+      #line_1 {
+        top: -150px;
+      }
+      #line_2 {
+        top: 150px;
+      }
+      #line_3 {
+        top: 450px;
+      }
+      .car img {
+        position: absolute;
+        height: 60px;
+        width: 40px;
+      }
+      #car img {
+        bottom: 0px;
+        left: 100px;
+      }
+      #car_1 img {
+        top: -100px;
+        left: 60%;
+      }
+      #car_2 img {
+        top: -200px;
+        left: 40%;
+      }
+      #car_3 img {
+        top: -350px;
+        left: 50%;
+      }
+      .flat img {
+        width: 180px;
+        height: 90px;
+      }
+
+      h1 {
+        font-size: 100px;
+        color: rgb(243, 100, 17);
+        position: absolute;
+        margin-top: 15%;
+        margin-left: 33%;
+      }
+      #time {
+        font-size: 150px;
+        color: rgb(255, 238, 0);
+        font-weight: 800;
+        margin-top: 15%;
+        margin-left: 49%;
+        position: absolute;
+        z-index: 4;
+      }
+
+      h3 {
+        font-size: 150px;
+        color: rgb(255, 238, 0);
+        font-weight: 600;
+        margin-top: 15%;
+        margin-left: 40%;
+        position: absolute;
+        z-index: 4;
+      }
+      .dis {
+        display: none;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      background-image: url('/ racing.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+    "
+  >
+    <audio
+      id="myaudio"
+      src="/bg.mp3"
+      controls="controls"
+      autoplay
+      loop="true"
+      hidden="true"
+    ></audio>
+    <div id="score_box">
+      得分: <span id="score">0</span><br />
+      <div class="flat"><img src="/racing banner.png" alt="" /></div>
+    </div>
+
+    <div id="restart_box">
+      <h1 class="animate__animated animate__bounce">Game Over</h1>
+      <button id="restart" class="btn btn-info">再玩一次<br /></button>
+    </div>
+
+    <div>
+      <span id="timer">
+        <span id="time">3</span>
+        <h3 class="dis"></h3>
+      </span>
+    </div>
+
+    <div class="container">
+      <div id="line_1" class="line"></div>
+      <div id="line_2" class="line"></div>
+      <div id="line_3" class="line"></div>
+      <div id="car" class="car"><img src="/ black car.png" alt="" /></div>
+      <div id="car_1" class="car"><img src="/yellow car.png" alt="" /></div>
+      <div id="car_2" class="car"><img src="/yellow car.png" alt="" /></div>
+      <div id="car_3" class="car"><img src="/yellow car.png" alt="" /></div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let audio = new Audio("/321.mp3");
+      // let audio1 = new Audio("/321.mp3");
+      //     audio1.play();
+      audio.play();
+
+      $(function () {
+        let counter = 3;
+        let interval = setInterval(function () {
+          counter--;
+
+          if (counter <= 0) {
+            clearInterval(interval);
+            $("#timer").html("<h3>Start</h3>").addClass("dis");
+
+            let container = $(".container");
+            let car = $("#car img");
+            let car_1 = $("#car_1 img");
+            let car_2 = $("#car_2 img");
+            let car_3 = $("#car_3 img");
+            let line_1 = $("#line_1");
+            let line_2 = $("#line_2");
+            let line_3 = $("#line_3");
+            let score = $("#score");
+            let restart_box = $("#restart_box");
+            let anim_id;
+            let game_over = false;
+            let score_counter = 1;
+            // let high_score = localStorage.getItem("high_score");
+            // $("#high_score").text(high_score);
+            let speed = 2;
+            let line_speed = 5;
+            let move_right = false;
+            let move_left = false;
+            let move_up = false;
+            let move_down = false;
+            let container_left = parseInt(container.css("left"));
+            let container_width = parseInt(container.width());
+            let container_height = parseInt(container.height());
+            let car_width = parseInt(car.width());
+            let car_height = parseInt(car.height());
+
+            // 移動車
+
+            // 與setTimeout和setInterval不同，
+            // requestAnimationFrame不需指定幀速率，
+            // 瀏覽器會自行決定最佳的幀效率，畫面更加流暢。
+            // 按左鍵的時候，他不是正在向左轉
+            $(document).on("keydown", function (e) {
+              //   if (game_over === false) {
+              let key = e.keyCode;
+              if (key === 37) {
+                //&& move_left === false
+                console.log("hi");
+                move_left = requestAnimationFrame(left);
+              } else if (key === 39 && move_right === false) {
+                move_right = requestAnimationFrame(right);
+              } else if (key === 38 && move_up === false) {
+                move_up = requestAnimationFrame(up);
+              } else if (key === 40 && move_down === false) {
+                move_down = requestAnimationFrame(down);
+              }
+              //   }
+            });
+
+            $(document).on("keyup", function (e) {
+              if (game_over === false) {
+                let key = e.keyCode;
+                if (key === 37) {
+                  cancelAnimationFrame(move_left);
+                  move_left = false;
+                } else if (key === 39) {
+                  cancelAnimationFrame(move_right);
+                  move_right = false;
+                } else if (key === 38) {
+                  cancelAnimationFrame(move_up);
+                  move_up = false;
+                } else if (key === 40) {
+                  cancelAnimationFrame(move_down);
+                  move_down = false;
+                }
+              }
+            });
+
+            // 向左移動 -5
+            function left() {
+              if (game_over === false && parseInt(car.css("left")) > 0) {
+                car.css("left", parseInt(car.css("left")) - 5);
+                move_left = requestAnimationFrame(left);
+              }
+            }
+
+            function right() {
+              if (
+                game_over === false &&
+                parseInt(car.css("left")) < container_width - car_width
+              ) {
+                car.css("left", parseInt(car.css("left")) + 5);
+                move_right = requestAnimationFrame(right);
+              }
+            }
+            function up() {
+              if (game_over === false && parseInt(car.css("top")) > 0) {
+                car.css("top", parseInt(car.css("top")) - 3);
+                move_up = requestAnimationFrame(up);
+              }
+            }
+
+            function down() {
+              if (
+                game_over === false &&
+                parseInt(car.css("top")) < container_height - car_height
+              ) {
+                car.css("top", parseInt(car.css("top")) + 3);
+                move_down = requestAnimationFrame(down);
+              }
+            }
+
+            // 我的小黑車撞到就重新
+
+            anim_id = requestAnimationFrame(repeat);
+            function repeat() {
+              if (
+                collision(car, car_1) ||
+                collision(car, car_2) ||
+                collision(car, car_3)
+              ) {
+                stop_the_game();
+                let audio = new Audio("/end.mp3");
+                audio.play();
+                return;
+              }
+              score_counter++;
+
+              if (score_counter % 20 == 0) {
+                score.text(parseInt(score.text()) + 1);
+              }
+              if (score_counter % 200 == 0) {
+                speed++;
+                line_speed++;
+              }
+              car_down(car_1);
+              car_down(car_2);
+              car_down(car_3);
+
+              line_down(line_1);
+              line_down(line_2);
+              line_down(line_3);
+
+              anim_id = requestAnimationFrame(repeat);
+            }
+            // 分數超過500，加速
+            // 場景與障礙物要不斷往下
+
+            // 小黃亂數移動速度值
+            function car_down(car) {
+              console.log(parseInt(car.css("top")));
+              let car_current_top = parseInt(car.css("top"));
+              if (car_current_top > container_height) {
+                car_current_top = -200;
+                let car_left = parseInt(
+                  Math.random() * (container_width - car_width)
+                );
+                car.css("left", car_left);
+              }
+              car.css("top", car_current_top + speed);
+            }
+
+            function line_down(line) {
+              let line_current_top = parseInt(line.css("top"));
+              if (line_current_top > container_height) {
+                line_current_top = -300;
+              }
+              line.css("top", line_current_top + line_speed);
+            }
+            // line 150px
+
+            $("#restart").click(function () {
+              location.reload();
+            });
+
+            // function setHighScore() {
+            //   if (high_score < parseInt(score.text())) {
+            //     high_score = parseInt(score.text());
+            //     localStorage.setItem("high_score", parseInt(score.text()));
+            //     $("#high_score").text(high_score);
+            //   }
+            // }
+
+            function stop_the_game() {
+              game_over = true;
+
+              cancelAnimationFrame(anim_id);
+              cancelAnimationFrame(move_right);
+              cancelAnimationFrame(move_left);
+              cancelAnimationFrame(move_up);
+              cancelAnimationFrame(move_down);
+              restart_box.slideDown();
+              $("#restart").focus();
+              setHightScore();
+            }
+
+            //   遊戲結束
+
+            function collision(car, car123) {
+              let carHead = car.offset().top;
+              let carHeight = car.outerHeight(true);
+              let carBottom = carHead + carHeight;
+              let carLeft = car.offset().left;
+              let carWidth = car.innerWidth();
+              let carRight = carLeft + carWidth;
+
+              let car123Head = car123.offset().top;
+              let car123Height = car123.outerHeight(true);
+              let car123Bottom = car123Head + car123Height;
+              let car123Width = car123.innerWidth();
+              let car123Left = car123.offset().left;
+              let car123Right = car123Width + car123Left;
+
+              if (
+                carBottom < car123Head ||
+                carHead > car123Bottom ||
+                carRight < car123Left ||
+                carLeft > car123Right
+              )
+                return false;
+              let audio1 = new Audio("/end.mp3");
+              audio1.play();
+
+              return true;
+            }
+
+            return;
+          } else {
+            $("#time").text(counter);
+            console.log("Timer" + counter);
+          }
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

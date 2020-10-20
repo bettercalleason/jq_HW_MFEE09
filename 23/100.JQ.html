@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>JQ HW</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .back {
+            position: relative;
+            width: 610px;
+            height: 610px;
+            background-color: rgb(209, 202, 202);
+            flex-wrap: wrap;
+            border: 5px solid rebeccapurple;
+        }
+
+        .pinkbox {
+            /* position: absolute; */
+            /* top: 400px;
+            left: 400px; */
+            width: 200px;
+            height: 200px;
+            float: left;
+            background-color: lightpink;
+        }
+
+        /* .cat{
+            position: absolute;
+            top: 0 px;
+            left: 0 px;
+        } */
+    </style>
+</head>
+
+<body>
+    <div class="back d-flex mx-auto">
+        <div class="box"></div>
+    </div>
+    <div class="container">
+        <center><button onClick="myClick()" id="start">Start</button></center>
+        <div class="hidden text-center">
+            
+            <h3 id="tap-num">你走了：<i>0</i> 步</h3>
+            <h3 id="play-time">經過時間：<i>0</i> 秒</h3>
+        </div>
+        <div class="text-center">
+        <h3 id="completed">恭喜過關</h3>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        for (let i = 1; i < 9; i++) {
+
+            let htmlString = `<div id="box${i}" class="allbox"><img src="./imgs/images/cat1_0${[i]}.gif" alt=""></div>`;
+
+            $(".back").append(htmlString);
+
+        };
+        $(".back").append(`<div class="pinkbox"></div>`);
+
+        $(".allbox").on("click", function () {
+            let beside = false;
+            let click_box = $(this).index();
+            // console.log(click_box)
+            let pink_box = $('.pinkbox').index();
+            let click_x = ((click_box + 2) % 3) + 1;
+            let click_y = Math.ceil(click_box / 3);
+            let pink_x = ((pink_box + 2) % 3) + 1;
+            let pink_y = Math.ceil(pink_box / 3);
+
+
+            if (click_x == pink_x) {
+                if (click_y == pink_y + 1 || click_y == pink_y - 1) {
+                    beside = true;
+                }
+            } else if (click_y == pink_y) {
+                if (click_x == pink_x + 1 || click_x == pink_x - 1) {
+                    beside = true;
+                }
+            }
+
+
+
+            if (beside) {
+                var t = $(this).clone();
+                $('.pinkbox').before(t);
+                $(this).before($('.pinkbox'));
+                t.before($(this));
+                t.remove();
+
+            }
+
+
+
+        });
+        // _time();
+
+        // function _time() {
+        //   timer = setTimeout(function () {
+        //     let playtime = playtime + 1;
+        //     $('#play-time').find('i').text(playtime);
+        //     clearTimeout(timer);
+        //     _time();
+        //   }, 1000);
+        // }
+
+        $(".hidden h3").hide();
+        $("#completed").hide();
+
+        $("button").click(function () {
+            $(".hidden h3").show();
+        });
+
+
+
+
+        // 1
+        // 2
+        // 3
+        // 4
+        // 5
+        // 9
+        // 7
+        // 8
+        // 6
+
+
+        // 123
+        // 459
+        // 786
+
+        // row,close
+
+        // x,yield
+
+        // 0,0  1,0  2,0
+        // 0,1  1,1  2,1
+        // 0,2  1,2  2,2
+    </script>
+</body>
+
+</html>

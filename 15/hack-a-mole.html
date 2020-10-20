@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hack a mole</title>
+  <link rel="shortcut icon" href="#" />
+  <link rel="stylesheet" href="/css/hack-a-mole.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+    crossorigin="anonymous" />
+</head>
+
+<body>
+  <div class="scorebar">Score:<span class="score"></span></div>
+  <div class="holes">
+    <div class="countdown">
+      <span class="animate__animated">按下空白鍵開始遊戲</span>
+    </div>
+    <div class="holewrap">
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+    </div>
+
+    <div class="holewrap">
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+    </div>
+
+    <div class="holewrap">
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+      <div class="hole">
+        <img class="boom" src="/img/boom.png" alt="" />
+        <img src="/img/hole.png" alt="" />
+        <img class="mouse" src="/img/mouse.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <div class="notice animate__animated animate__flash animate__infinite animate__slower"><span></span></div>
+  <div class="minus"><img src="/img/-100.png" alt=""></div>
+  <audio class="bgMusic" controls src="/audio/383_full_mr-toad.mp3"></audio>
+  <audio class="hit" controls src="/audio/hit-sound.mp3"></audio>
+  <audio class="boing" controls src="/audio/boing-sound.mp3"></audio>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script>
+    //將所有洞編號放入陣列
+    let holeArr = $(".hole");
+    // console.log("holeArr:", holeArr);
+    // console.log("holeArrLength:", holeArr.length);
+
+    //隨機選擇一個洞出現老鼠的function
+    const mouseout = () => {
+      let i = Math.floor(Math.random() * 9);
+      // console.log("holeArr[i]:", holeArr[i]);
+      // console.log($(holeArr[i]).find(".mouse"));
+      $(holeArr[i]).find(".mouse").css("visibility", "visible");
+      $(holeArr[i]).find(".boom").css("visibility", "hidden");
+    };
+
+
+    //開始前倒數3秒
+    let sec = 4;
+    const countdown = () => {
+      $(".countdown").css("visibility", "visible");
+      if (sec > 1) {
+        sec = sec - 1;
+        $(".countdown span")
+          .text(sec)
+          .css({ color: "rgb(255, 44, 44)", fontSize: "5rem" });
+        setTimeout(() => {
+          countdown();
+        }, 1000);
+        //倒數0時顯示start
+      } else {
+        $(".countdown span")
+          .text("遊戲開始")
+          .addClass("animate__pulse");
+        setTimeout(() => {
+          $(".countdown").css("visibility", "hidden");
+        }, 1000);
+      }
+    };
+
+    //按下空白鍵開始遊戲
+    $(document).one("keydown", function (e) {
+      let code = e.which;
+      if (code === 32) {
+        countdown();
+        setTimeout(() => {
+          $(".notice")
+            .text("按下ESC暫停遊戲")
+            .css("visibility", "visible");
+          $('.bgMusic').prop("volume", 0.2).trigger('play');
+          mouseoutStart = setInterval(() => {
+            mouseout();
+          }, 1000);
+        }, 4000);
+      }
+    });
+
+
+    //暫停切換
+    let tgl = false;
+    const togglePause = () => {
+      tgl = !tgl
+    };
+
+    //按下ESC暫停遊戲
+    $(document).on("keydown", function (e) {
+      let code = e.which;
+      if (code === 27) {
+        togglePause();
+        if (tgl) {
+          clearTimeout(mouseoutStart);
+          $('.bgMusic').trigger('pause');
+          $(".countdown").css("visibility", "visible");
+          // $(".countdown span").text("暫停");
+          $(".countdown span").html(`<i class="far fa-pause-circle"></i>`);
+          $(".notice").text("按下ESC繼續遊戲")
+        } else {
+          $(".countdown").css("visibility", "hidden");
+          $(".notice").text("按下ESC暫停遊戲")
+          $('.bgMusic').prop("volume", 0.2).trigger('play');
+          mouseoutStart = setInterval(() => {
+            mouseout();
+          }, 1000);
+        }
+      }
+    });
+
+    let scoreNum = 0;
+    //打到老鼠 老鼠消失 出現爆炸圖案
+    $(".hole img:last-child").on("click", function () {
+      // console.log("selected mouse:", $(this));
+      $(this).css("visibility", "hidden");
+      $(".hit").prop("volume", 0.5).trigger('play');
+      let boomImg = $(this).parent().find(".boom");
+      // console.log("selected boom:", $(this).parent().find(".boom"));
+      boomImg.css("visibility", "visible");
+
+      //0.5毫秒清除炸彈圖案
+      setTimeout(() => {
+        boomImg.css("visibility", "hidden");
+      }, 500);
+
+      //分數往上加
+      scoreNum += 100;
+      $(".score").text(scoreNum);
+    });
+
+    //亂打扣分
+    $(".hole img:nth-child(2)").on("click", function (e) {
+      $(".boing").prop("volume", 0.3).trigger('play');
+      $(".minus")
+        .css({ visibility: 'visible', position: 'absolute', left: e.pageX - 30, top: e.pageY + 40 })
+      setTimeout(() => {
+        $(".minus").css("visibility", "hidden")
+      }, 300)
+      scoreNum -= 100;
+      $(".score").text(scoreNum);
+    });
+
+
+    //槌子槌下的動畫
+    $(".holes").on("click", function () {
+      $(".holes").css("cursor", "url(/img/hammerdown.ico), auto");
+      setTimeout(() => {
+        $(".holes").css("cursor", "url(/img/hammer.ico), auto");
+      }, 500);
+    });
+  </script>
+</body>
+
+</html>

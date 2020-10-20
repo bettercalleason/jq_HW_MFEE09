@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>box move</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        * {
+            overflow-x: hidden;
+        }
+
+        img {
+            margin-top: 30px;
+
+        }
+
+        .wrap {
+
+            width: 700px;
+            height: 400px;
+            background-color: #ddd;
+            position: relative;
+        }
+
+        .box {
+            width: 30px;
+            height: 30px;
+            background-color: lightblue;
+            position: absolute;
+            border-radius: 50%;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        .block {
+            width: 100px;
+            height: 30px;
+            position: absolute;
+            animation: block 2s infinite linear;
+        }
+
+        .red {
+            background-color: rgb(189, 71, 50);
+            top: 330px;
+            left: 700px;
+            animation: block 2s infinite linear;
+        }
+
+        .blue {
+            background-color: rgb(50, 71, 189);
+            top: 250px;
+            left: 700px;
+            animation: block 3s infinite linear;
+        }
+
+        .yellow {
+            background-color: #ddd;
+            top: 160px;
+            left: 700px;
+            animation: block 1s infinite linear;
+        }
+
+        .orange {
+            background-color: rgb(223, 151, 58);
+            top: 80px;
+            left: 700px;
+            animation: block 1.5s infinite linear;
+        }
+
+        .green {
+            background-color: rgb(40, 110, 38);
+            top: 0px;
+            left: 700px;
+            animation: block 5s infinite linear;
+        }
+
+        @keyframes block {
+            0% {
+                left: 700px
+            }
+
+            100% {
+                left: -100px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text-center"><img width="45px" src="https://www.flaticon.com/svg/static/icons/svg/3538/3538063.svg"
+            alt="">
+    </div>
+    <div class="wrap mx-auto d-flex justify-content-center">
+        <div class="box"></div>
+        <div class="block red"></div>
+        <div class="block blue"></div>
+        <div class="block yellow"></div>
+        <div class="block orange"></div>
+        <div class="block green"></div>
+    </div>
+
+    <div class="button-area text-center mt-3">
+        <button class="btn btn-success" id="up">up</button>
+        <div class="mx-auto">
+            <button class="btn btn-success" id="left">left</button>
+            <button class="btn btn-success" id="right">right</button>
+        </div>
+        <button class="btn btn-success" id="down">down</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <script>
+        let box = $('.box');
+        let red = $('.red');
+        let blue = $('.blue');
+        let yellow = $('.yellow');
+        let orange = $('.orange');
+        let green = $('.green');
+
+        let timeoutID1 = window.setInterval(() => {
+            if (collision(box, red)) {
+                console.log('碰到red了');
+                alert('GG!');
+                location.reload();
+            }
+            if (collision(box, blue)) {
+                console.log('碰到blue了');
+                alert('GG!');
+                location.reload();
+            }
+            if (collision(box, yellow)) {
+                console.log('碰到yellow了');
+                alert('GG!');
+                location.reload();
+            }
+            if (collision(box, orange)) {
+                console.log('碰到orange了');
+                alert('GG!');
+                location.reload();
+            }
+            if (collision(box, green)) {
+                console.log('碰到green了');
+                alert('GG!');
+                location.reload();
+            }
+        });
+
+        function collision($div1, $div2) {
+            var x1 = $div1.offset().left;
+            var y1 = $div1.offset().top;
+            var h1 = $div1.outerHeight(true);
+            var w1 = $div1.outerWidth(true);
+            var b1 = y1 + h1;
+            var r1 = x1 + w1;
+            var x2 = $div2.offset().left;
+            var y2 = $div2.offset().top;
+            var h2 = $div2.outerHeight(true);
+            var w2 = $div2.outerWidth(true);
+            var b2 = y2 + h2;
+            var r2 = x2 + w2;
+
+            if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+            return true;
+        }
+
+        let timeoutID = null;
+        $("#left").mouseenter(function () {
+            timeoutID = window.setInterval((() => {
+                let newLeft = parseInt($(".box").css("left"));
+                if (newLeft > 10) {
+                    $(".box").css("left", "-=20px")
+                }
+            }
+            ), 100);
+            // console.log("left mouseenter:", timeoutID);
+        });
+        $("#left").mouseleave(function () {
+            clearInterval(timeoutID);
+            // console.log("left leave:", timeoutID)
+        });
+
+        $("#right").mouseenter(function () {
+            timeoutID = window.setInterval((() => {
+                let newLeft = parseInt($(".box").css("left"));
+                if (newLeft < 650) {
+                    $(".box").css("left", "+=20px")
+                }
+            }
+            ), 100);
+            // console.log("right mouseenter:", timeoutID)
+            // console.log($('.box').css('left'));
+        });
+        $("#right").mouseleave(function () {
+            clearInterval(timeoutID);
+            // console.log("right leave:", timeoutID)
+        });
+
+        $("#up").mouseenter(function () {
+            timeoutID = window.setInterval((() => {
+                let newTop = parseInt($(".box").css("top"));
+                if (newTop > 10) {
+                    $(".box").css("top", "-=20px")
+                }
+                if (newTop < 11) {
+                    alert("You are the winner! Ya~~");
+                    $(".box").css("top", "420px")
+                }
+            }
+            ), 100);
+            // console.log("top mouseenter:", timeoutID);
+        });
+        $("#up").mouseleave(function () {
+            clearInterval(timeoutID);
+            // console.log("top leave:", timeoutID)
+        });
+
+        $("#down").mouseenter(function () {
+            timeoutID = window.setInterval((() => {
+
+                let newTop = parseInt($(".box").css("top"));
+
+                if (newTop < 360) {
+                    $(".box").css("top", "+=20px")
+                }
+            }
+            ), 100);
+            // console.log("down mouseenter:", timeoutID);
+        });
+        $("#down").mouseleave(function () {
+            clearInterval(timeoutID);
+            // console.log("down leave:", timeoutID)
+        });
+
+        $(document).on("keydown", function (e) {
+            //event=e=evt
+            console.log("event", e);
+            let code = e.which;
+            if (code === 37) {
+                // console.log("hi 37");
+                // console.log("left", $(".box").css("left"));
+                let newLeft = parseInt($(".box").css("left"));
+
+                if (newLeft > 0) {
+                    $(".box").css("left", "-=20px")
+                }
+            } else if (code === 38) {
+                // console.log("hi 38");
+                let newTop = parseInt($(".box").css("top"));
+
+                if (newTop > 10) {
+                    $(".box").css("top", "-=20px")
+                }
+                if (newTop < 11) {
+                    alert("You are the winner! Ya~~");
+                    $(".box").css("top", "370px");
+                }
+            } else if (code === 39) {
+                // console.log("hi 39");
+                let newLeft = parseInt($(".box").css("left"));
+
+                if (newLeft < 580) {
+                    $(".box").css("left", "+=20px")
+                }
+            } else if (code === 40) {
+                // console.log("hi 40");
+                let newTop = parseInt($(".box").css("top"));
+
+                if (newTop < 360) {
+                    $(".box").css("top", "+=20px")
+                }
+            };;
+        });
+    </script>
+
+</body>
+
+</html>

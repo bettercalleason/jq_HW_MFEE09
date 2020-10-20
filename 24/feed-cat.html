@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery作業</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Concert+One&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: rgb(240, 248, 255);
+            font-family: 'Concert One', 微軟正黑體, cursive;
+
+        }
+
+        .wall {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            background-color: #faa;
+        }
+
+        .road {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            background-color: rgb(255, 255, 191);
+        }
+
+        .start {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            background-color: #fff;
+            background-image: url('./start.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+
+        .goal {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #fff;
+            background-image: url('./meal.gif');
+            background-size: contain;
+        }
+
+        .canned {
+            background-color: #fff;
+            background-image: url('./canned-food.png');
+            background-size: contain;
+        }
+
+        .score {
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+
+
+        <div class="row">
+            <div class="description">
+                <h4 class="font-weight-bold">說明</h4>
+                <h5>按下START開始遊戲，</h5>
+                <h5>請用滑鼠滑過黃色區塊，抵達貓咪位置</h5>
+                <h5>小心不要碰到紅色區塊</h5>
+                <div class="score mt-5">
+                    <span>Score:</span>
+                    <span class="totalScore">0</span>
+                </div>
+                <div id="time"></div>
+            </div>
+            <div class="gamebase d-flex mx-auto mt-2">
+                <!-- row1 -->
+                <div class="wrap">
+                    <div class="start"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row2 -->
+                <div class="wrap">
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row3 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row4 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row5 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row6 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row7 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row8 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                </div>
+                <!-- row9 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="road"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="road"></div>
+                    <div class="goal"></div>
+                </div>
+                <!-- row10 -->
+                <div class="wrap">
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+                    <div class="wall"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $(".start").click(function () {
+            $(".start").addClass("canned");
+
+            $(".road").mouseenter(function () {
+                if ($(this).hasClass("road") && (!$(this).hasClass("canned"))) {
+                    $(this).addClass("canned");
+                    let totalScore = parseInt($(".totalScore").text()) + 10;
+                    $(".totalScore").text(totalScore);
+                }
+            });
+
+            $(".wall").mouseenter(function () {
+                alert("Oops! 按Enter繼續");
+            });
+
+            $(".goal").mouseenter(function () {
+                alert("感謝餵食!");
+            });
+        });
+
+
+
+    </script>
+</body>
+
+</html>

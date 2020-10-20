@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        .answer {
+            width: 150px;
+            border: 1px solid lightgray;
+            text-align: center;
+            background-color: rgb(103, 137, 201);
+            color: #fff;
+        }
+
+        .box {
+            min-height: 24px;
+        }
+
+        #show_guess,
+        #show_result {
+            width: 150px;
+            border: 1px solid lightgray;
+            text-align: center;
+
+        }
+
+        .title {
+            width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #17a2b8
+        }
+
+        .input_wrapper {
+            width: 300px;
+            margin: 0 auto;
+
+        }
+
+        .box_wrapper {
+            width: 300px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title">Guess The Numbers</div>
+
+        <div class="input_wrapper">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="guess" placeholder="Take a guess!" pattern="\d*"
+                    maxlength="4">
+                <div class=" input-group-append">
+                    <button class="btn btn-info" type="button" id="button">Send</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <button type="button" class="btn btn-danger" id="test">test</button> -->
+
+        <div class="box_wrapper d-flex">
+            <div class="wrapper2">
+                <div class="answer">Your guess </div>
+                <div class="box" id="show_guess"></div>
+            </div>
+            <div class="wrapper2">
+                <div class="answer">Result </div>
+                <div class="box" id="show_result"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="./game.js"></script>
+    <script>
+
+        //產生題目//
+        let password = [];
+        // 做裡面的迴圈直到array length = 4
+        while (password.length < 4) {
+            // 隨機產生一個1-9的數
+            let num = Math.floor(Math.random() * 10);
+            // console.log(num);
+            // console.log(password);
+            // 如果陣列沒有這個數，就可以加到陣列裡
+            if (!password.includes(num)) {
+                password.push(num)
+                console.log(password)
+            }
+        }
+
+        // todo: check input要是4碼，要是數字
+
+
+        // 按下button後判斷幾A幾B
+        $("#button").on("click", decideAB)
+
+        let show_guess = document.querySelector("#show_guess")
+        let show_result = document.querySelector("#show_result")
+
+        // 判斷幾A幾B
+        function decideAB() {
+
+            let a = 0
+            let b = 0
+
+            // 首先得到input裡的值
+            // split("")轉為字串array
+            player_guess = document.querySelector("#guess").value.split("")
+            console.log(player_guess)
+            // console.log(parseInt(player_guess[1]))
+
+
+            for (i = 0; i < 4; i++) {
+                // 檢查密碼是否有包含input數字
+                // parseInt把字串array轉為數字
+                // 有-->看位置是否一樣
+                if (password.includes(parseInt(player_guess[i]))) {
+                    console.log("correct number= " + player_guess[i])
+
+                    // 位置一樣--> 把a加一
+                    if (parseInt(player_guess[i]) == password[i]) {
+                        a++
+                        console.log("a= " + a)
+                    }
+                    // 位置不一樣--> 把b加一
+                    else {
+                        b++
+                        console.log("b= " + b)
+                    }
+                }
+                // 沒有--> 0a0b
+                else {
+                    // do nothing
+                }
+
+            }
+
+            // 若input格式錯誤就alert，且不紀錄
+            for (i = 0; i < 4; i++) {
+                if (isNaN(parseInt(player_guess[0]))) {
+                    alert("The input must be numbers.")
+                    // clear input
+                    $("#guess").val("");
+                    break
+                }
+                else if (isNaN(parseInt(player_guess[1]))) {
+                    alert("The input must be numbers.")
+                    // clear input
+                    $("#guess").val("");
+                    break
+                }
+                else if (isNaN(parseInt(player_guess[2]))) {
+                    alert("The input must be numbers.")
+                    // clear input
+                    $("#guess").val("");
+                    break
+                }
+                else if (isNaN(parseInt(player_guess[3]))) {
+                    alert("The input must be numbers.")
+                    // clear input
+                    $("#guess").val("");
+                    break
+                }
+                else {
+                    // 顯示幾a幾b
+                    player_guess_str = document.querySelector("#guess").value
+                    show_guess.innerHTML += `<div>${player_guess_str}<div>`
+                    show_result.innerHTML += `<div>${a}a${b}b<div>`
+
+                    // clear input
+                    document.querySelector("#guess").value = ""
+
+                    // if 4a4b
+                    if (show_result.innerText.includes("4a0b")) {
+                        alert("BINGO!!!!!")
+                        // console.log(show_result.innerText.includes("4a0b"))
+                    }
+                    break
+                }
+            }
+
+        }
+
+    </script>
+</body>
+
+
+
+</html>

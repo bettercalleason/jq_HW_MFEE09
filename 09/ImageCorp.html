@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $("#btnTest").click(function() {
+                $("#dvWin")
+                .css("width", $("#w").val() + "px")
+                .css("height", $("#h").val() + "px")
+                .css("overflow", "hidden");
+                $("#imgCorp")
+                .css("margin-top", $("#mt").val() + "px")
+                .css("margin-left", $("#ml").val() + "px");
+                $("#dvSrc").text($("#dvDisp").html());
+            }).click();
+        });
+    </script>
+    <style type="text/css">
+        body,input { font-size: 9pt; }
+        input { width: 50px; }
+        #dvWin { border: solid 2px red; }
+    </style>
+</head>
+<body>
+<p>
+DIV: width=<input type="text" id="w" value="100" /> height=<input type="text" id="h" value="100" /><br />
+IMG: margin-top=<input type="text" id="mt" value="0" /> margin-left=<input type="text" id="ml" value="0" /><br />
+<input type="button" id="btnTest" value="Set" />
+</p>
+<p>
+<div id="dvDisp">
+<div id="dvWin"><img id="imgCorp" src="Building.JPG" /></div>
+</div>
+</p>
+<p><div id="dvSrc"></div></p>
+</body>
+</html>

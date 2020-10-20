@@ -1,0 +1,154 @@
+*{
+    font-family: 'Microsoft JhengHei';
+}
+.wrap {
+  width: 800px;
+  height: 400px;
+  margin: 30px auto;
+  margin-bottom: 0px;
+  background-image: url("../imgs/wallpapertip_i-love-you-suman_610111.jpg");
+  background-size: contain;
+  position: relative;
+  overflow: hidden;
+}
+.jet {
+  width: 120px;
+  height: 100px;
+  position: absolute;
+  top: 35%;
+  left: 0;
+  z-index: 1;
+}
+.jet img{
+    width: 100%;
+    height: 100%;
+    transform: rotate(90deg);
+}
+.btn-container {
+  width: 800px;
+  margin: 10px auto;
+}
+.controller {
+  width: 150px;
+}
+.bullet {
+  width: 20px;
+  height: 5px;
+  /* left: 100px;
+  top: 48px; */
+  background-color: yellow;
+  position: absolute;
+  /* z-index: -1; */
+}
+.asteroid{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    top: 20px;
+    left: 860px;
+}
+.asteroid img{
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+.position-screen{
+    width: 800px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: turquoise;
+    padding: 10px;
+}
+.info-container{
+    width: 150px;
+    font-size: 26px;
+    font-weight: bold;
+    font-family: 'Orbitron', sans-serif;
+}
+.game-cover{
+    width: 800px;
+    height: 400px;
+    margin: 30px auto;
+    /* background: rgba(0, 0, 0, 0.7); */
+    /* background: url("./imgs/cosmos-1845140_1920.jpg"); */
+    background: url("https://media.giphy.com/media/3ov9k1173PdfJWRsoE/giphy.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    top: -30px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-cover img{
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+.game-cover h1{
+    font-size: 72px;
+    font-weight: bolder;
+    text-shadow: 5px 5px rgb(13, 4, 25);
+    color: rgb(227, 231, 0);
+}
+.game-cover h2{
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 5px 5px rgb(13, 4, 25);
+    color: rgb(251, 238, 46);
+}
+
+.game-cover p{
+    color: #bbb;
+    font-size: 5px;
+}
+
+.game-cover button{
+    width: 200px;
+    height: 40px;
+    font-weight: bold;
+    background: rgb(189, 26, 26);
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+.game-cover button:hover{
+    background: rgb(226, 95, 19); 
+}
+
+.game-over{
+    width: 800px;
+    height: 400px;
+    display: none;
+    background-image: url("../imgs/gameover-background.svg");
+    position: absolute;
+    top: 0;
+    z-index: 10;
+}
+
+.game-over img{
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+    margin-left: 10%;
+}
+
+.game-over button{
+    width: 200px;
+    height: 40px;
+    font-weight: bold;
+    background: rgb(189, 26, 26);
+    color: white;
+    border: none;
+    transition: 0.3s;
+    margin-left: 300px;
+}
+.game-over button:hover{
+    background: rgb(226, 95, 19); 
+}

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My ARPG game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            background-color: #34495e;
+            box-sizing: border-box;
+            height: 100vh;
+        }
+
+        .wrap {
+            width: 100%;
+        }
+
+        .content {
+            color: #ecf0f1;
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: bold;
+        }
+
+        #gameName {
+            padding: 1rem 0;
+        }
+
+        .game_area {
+            /* overflow: hidden; */
+            position: relative;
+        }
+
+        #author {
+            padding: 0.5rem 0;
+            margin: 0;
+        }
+
+
+
+        /* rpg item */
+        #hero {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            top: 50%;
+            left: 50%;
+        }
+
+        #hero img {
+            width: 100%;
+            height: 100%;
+        }
+
+        span {
+            color: crimson;
+            font-weight: bold;
+        }
+
+        li {
+            font-size: 20px;
+        }
+        small{
+            font-size: 20px;
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="wrap container-fluid mx-auto">
+        <div class="content">
+            <h2 id="gameName">小杰快打</h2>
+            <div class="game_area mx-auto">
+            </div>
+            <h4 id="author">Created by Jaycub</h4>
+        </div>
+    </div>
+
+    <!-- intro Modal -->
+    <div class="modal fade" data-backdrop="static" id="game_intro" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h2 class="text-info font-weight-bold mx-auto" id="exampleModalCenterTitle">小杰快打
+                    </h2>
+                </div>
+                <h3 class="mx-auto pt-3">新手教學</h3>
+                <div class="modal-body">
+                    <div class="container">
+                        <ol>
+                            <li>目標：請盡量於存活時間內殺死越多敵人，獲得越高的分數。</li>
+                            <br>
+                            <li>操作：請以鍵盤的<span> <i class="fas fa-arrow-circle-up"></i> <i
+                                        class="fas fa-arrow-circle-down"></i> <i class="fas fa-arrow-circle-left"></i>
+                                    <i class="fas fa-arrow-circle-right"></i> </span>控制方向。
+                            </li>
+                            <br>
+                            <li>攻擊：按下 <span>Q</span> 對 <span>左右</span> 方發射氣功波。</li>
+                            <small>＊注意方向為上下時無法攻擊！</small>
+                            <br>
+                            <li>總生命有 <span>5</span> 條。</li>
+                            <br>
+                            <li>擊殺小隻怪物(血量少)得 <span>1</span> 分。<br>大隻怪物(血量多) <span>20</span> 分。</li>
+                            <br>
+                            <li>遊戲共有 <span>3</span> 個難度等級，會在 <span>30</span> 、 <span>200</span> 分時自動提升難度。</li>
+                            <br>
+                            <li>有背景音樂，不想開啟可使用靜音。</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-info mx-auto" id="closeIntroBtn">知道了！</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+
+
+
+
+    <script>
+        const closeIntroBtn = document.querySelector('#closeIntroBtn');
+        const game_area = document.querySelector('.game_area');
+
+        // Create the canvas
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 1600;
+        canvas.height = 800;
+        $('.game_area').append(canvas);
+
+
+        // Background image
+        let bgReady = false;
+        let bgImage = new Image();
+        bgImage.onload = function () {
+            bgReady = true;
+        };
+        bgImage.src = "./我的素材/battle_field.jpg";
+
+        // Hero image
+        let heroReady = false;
+        let heroImage = new Image();
+        heroImage.onload = () => {
+            heroReady = true;
+        };
+        heroImage.src = "./我的素材/向下-2.png";
+        let heroLivesImage = new Image();
+        heroLivesImage.src = './我的素材/heroLife.png';
+
+        // 1 left 2 right 
+        let hero_direction = null;
+
+        //collide hit effect
+        let shockwaveHitImage = new Image();
+
+
+        //strike shockwave image
+        let shockwaveReady = false;
+        let shockwaveImage = new Image();
+        shockwaveImage.onload = () => {
+            shockwaveReady = true;
+        };
+        let strike_once = true;  //make sure strike_once when press
+
+        //monster image
+        let monsterImage = new Image();
+
+        // Game objects
+        const hero = {
+            speed: 256, // movement in pixels per second
+            x: 0,
+            y: 0
+        };
+        const heroLives = [1, 2, 3, 4, 5]
+        let lossHealth = false;
+        let monsters = [];
+        let shockwaves = [];
+        let monstersKill = 0;
+        let shockwavesHit = [];
+
+        //level setting
+        let game_level = 1;
+        let gameLevelImage = new Image();
+
+        //audio
+        const backgroundMusicAudio = new Audio('./我的素材/audio/Wartime.mp3');
+        backgroundMusicAudio.volume = 0.3;
+        const smallExplosionAudio = new Audio('./我的素材/audio/小型爆炸-1.wav');
+        smallExplosionAudio.volume = 0.5;
+        const heroDieAudio = new Audio('./我的素材/audio/死亡.wav');
+
+        //let motion smooth - player input
+        const keysDown = {};
+
+        addEventListener("keydown", function (e) {
+            keysDown[e.keyCode] = true;
+            //only strike once
+            if (e.keyCode == 81 && hero_direction) {
+                if (strike_once == true) {
+                    shockwaves.push({
+                        speed: 200, // movement in pixels per second
+                        x: hero.x,
+                        y: hero.y,
+                        direction: hero_direction,
+                    });
+                    strike_once = false;
+                };
+            };
+        }, false);
+
+        addEventListener("keyup", function (e) {
+            strike_once = true;
+            delete keysDown[e.keyCode];
+            if (lossHealth) {
+                heroLives.pop();
+                lossHealth = false;
+            };
+        }, false);
+
+        backgroundMusicAudio.addEventListener('ended', () => {
+            backgroundMusicAudio.play();
+        });
+
+
+        const gameOverImage = new Image();
+        gameOverImage.src = './我的素材/game_over.jpg';
+        heroDieAudio.addEventListener('ended', () => {
+            cancelAnimationFrame(mainLoop);
+            ctx.drawImage(gameOverImage, 400, 130, 800, 600);
+            ctx.fillStyle = "rgb(255, 255, 255)";
+            ctx.font = "36px Helvetica bolder";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText("你的分數:  " + monstersKill, 670, 500);
+            ctx.fillText("目前關卡:  " + game_level, 670, 550);
+            ctx.fillStyle = "rgb(255, 211, 0)";
+            ctx.fillText("點擊畫面並重啟遊戲", 620, 650);
+            game_area.addEventListener('click', () => {
+                location.href = location.href;
+            });
+        });
+
+        //change pic make gif
+        let gif_loop_number = 1;
+
+
+        // Update game objects
+        const update = (modifier) => {
+            if (gif_loop_number >= 20) {
+                gif_loop_number = 1;
+            };
+            if (38 in keysDown) { // Player holding up
+                if (gif_loop_number >= 20) {
+                    gif_loop_number = 1;
+                };
+                if (gif_loop_number >= 5) {
+                    heroImage.src = `./我的素材/向上-1.png`;
+                };
+                if (gif_loop_number >= 10) {
+                    heroImage.src = `./我的素材/向上-2.png`;
+                };
+                if (gif_loop_number >= 15) {
+                    heroImage.src = `./我的素材/向上-3.png`;
+                };
+                if (hero.y > 300) {
+                    hero.y -= hero.speed * modifier;    //top border
+                };
+
+                gif_loop_number += 1;
+                hero_direction = null;
+            };
+            if (40 in keysDown) { // Player holding down
+                if (gif_loop_number >= 20) {
+                    gif_loop_number = 1;
+                }
+                if (gif_loop_number >= 5) {
+                    heroImage.src = `./我的素材/向下-1.png`;
+                };
+                if (gif_loop_number >= 10) {
+                    heroImage.src = `./我的素材/向下-2.png`;
+                };
+                if (gif_loop_number >= 15) {
+                    heroImage.src = `./我的素材/向下-3.png`;
+                };
+                if (hero.y < 700) {
+                    hero.y += hero.speed * modifier;    //bottom border
+                };
+
+                gif_loop_number += 1;
+                hero_direction = null;
+            }
+            if (37 in keysDown) { // Player holding left
+                if (gif_loop_number >= 20) {
+                    gif_loop_number = 1;
+                };
+                if (gif_loop_number >= 5) {
+                    heroImage.src = `./我的素材/向左走路-1.png`;
+                };
+                if (gif_loop_number >= 10) {
+                    heroImage.src = `./我的素材/向左走路-2.png`;
+                };
+                if (gif_loop_number >= 15) {
+                    heroImage.src = `./我的素材/向左走路-3.png`;
+                };
+                if (hero.x > 0) {
+                    hero.x -= hero.speed * modifier;   //left border
+                };
+
+                gif_loop_number += 1;
+                hero_direction = 1;
+            }
+            if (39 in keysDown) { // Player holding right
+                if (gif_loop_number >= 20) {
+                    gif_loop_number = 1;
+                }
+                if (gif_loop_number >= 5) {
+                    heroImage.src = `./我的素材/向右走路-1.png`;
+                };
+                if (gif_loop_number >= 10) {
+                    heroImage.src = `./我的素材/向右走路-2.png`;
+                };
+                if (gif_loop_number >= 15) {
+                    heroImage.src = `./我的素材/向右走路-3.png`;
+                };
+                if (hero.x < 1520) {
+                    hero.x += hero.speed * modifier;    //right border
+                };
+
+                gif_loop_number += 1;
+                hero_direction = 2;
+            }
+            if (81 in keysDown) { // Player holding right
+                if (hero_direction == 1) {
+
+                    heroImage.src = `./我的素材/left-attack-1.png`;
+                    setTimeout(() => {
+                        heroImage.src = `./我的素材/向左走路-2.png`;
+                    }, 400);
+                };
+                if (hero_direction == 2) {
+
+                    heroImage.src = `./我的素材/right-attack-1.png`;
+                    setTimeout(() => {
+                        heroImage.src = `./我的素材/向右走路-2.png`;
+                    }, 400);
+                };
+            };
+
+            //monster walk
+            if (monsters.length) {
+                monsters.forEach((item) => {
+                    if (item.direction == 2) {
+                        item.x += item.speed * modifier;
+                        item.speed += 1;
+                    };
+                    if (item.direction == 1) {
+                        item.x -= item.speed * modifier;
+                        item.speed += 1;
+                    };
+                });
+            };
+
+
+            //skill effect fly
+            if (shockwaves.length) {
+                shockwaves.forEach(item => {
+                    if (item.direction == 2) {
+                        item.x += item.speed * modifier;
+                        item.speed += 20;
+                    };
+                    if (item.direction == 1) {
+                        item.x -= item.speed * modifier;
+                        item.speed += 20;
+                    };
+                });
+            };
+
+
+            // check if monster hit by shockwave
+            // check if monster touch hero
+            monsters.forEach((a_monster) => {
+                shockwaves.forEach((a_shockwave) => {
+                    if (
+                        (a_monster.x <= (a_shockwave.x + 70)
+                            && a_shockwave.x <= (a_monster.x + 70)
+                            && a_monster.y <= (a_shockwave.y + 70)
+                            && a_shockwave.y <= (a_monster.y + 70)
+                            && a_monster.category <= 4) ||
+                        (a_monster.x <= (a_shockwave.x + 70)
+                            && a_shockwave.x <= (a_monster.x + 240)
+                            && a_monster.y <= (a_shockwave.y + 70)
+                            && a_shockwave.y <= (a_monster.y + 200)
+                            && a_monster.category == 5)
+                    ) {
+                        a_monster.health -= 1;  //remove in render
+                        if (a_monster.health == 0 && a_monster.category <= 4) {
+                            ++monstersKill;
+                        };
+                        if (a_monster.health == 0 && a_monster.category == 5) {
+                            monstersKill += 20;
+                        };
+                        a_shockwave.has_been_used = true;           //remove in render
+                        shockwavesHit.push({
+                            category: a_monster.category,
+                            x: a_monster.x,
+                            y: a_monster.y,
+                        });
+                        smallExplosionAudio.play();
+                    }
+                })
+                if (
+                    (a_monster.x <= (hero.x + 70)
+                        && hero.x <= (a_monster.x + 70)
+                        && a_monster.y <= (hero.y + 60)
+                        && hero.y <= (a_monster.y + 60)
+                        && a_monster.category <= 4) ||
+                    (a_monster.x <= (hero.x + 70)
+                        && hero.x <= (a_monster.x + 180)
+                        && a_monster.y <= (hero.y + 50)
+                        && hero.y <= (a_monster.y + 150)
+                        && a_monster.category == 5)
+                ) {
+                    heroImage.src = "./我的素材/pain.png";
+                    lossHealth = true;
+                };
+            })
+
+        };
+
+
+
+
+        // Draw everything
+        const render = () => {
+            let exist_shockwaves = [];
+            let exist_monsters = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas recycle memory
+
+            if (bgReady) {
+                ctx.drawImage(bgImage, -100, 0, 1800, 800);
+            }
+
+
+            if (monsters.length) {
+                monsters.forEach((item) => {
+                    if (item.category == 5 && item.direction == 1) {
+                        monsterImage.src = './我的素材/monster2-left.png';
+                        ctx.drawImage(monsterImage, item.x, item.y, 240, 200);
+                    };
+                    if (item.category == 5 && item.direction == 2) {
+                        monsterImage.src = './我的素材/monster2-right.png';
+                        ctx.drawImage(monsterImage, item.x, item.y, 240, 200);
+                    };
+                    if (item.category <= 4) {
+                        monsterImage.src = './我的素材/monster.png';
+                        ctx.drawImage(monsterImage, item.x, item.y, 70, 70);
+                    };
+                    if (item.x >= -100 && item.x <= 1700 && (item.health != 0)) {   //recycle memory
+                        exist_monsters.push(item);
+                    };
+                });
+            };
+
+            if (heroReady) {
+                if (!heroLives.length) {
+                    heroImage.src = "./我的素材/die.png";
+                    ctx.drawImage(heroImage, hero.x, hero.y, 100, 70);
+                    heroDieAudio.play();
+                } else {
+                    ctx.drawImage(heroImage, hero.x, hero.y, 80, 80);
+                };
+            }
+
+            if (shockwaves.length) {
+                // console.log(shockwave);
+                shockwaves.forEach((item) => {
+                    if (item.direction == 1) {
+                        shockwaveImage.src = './我的素材/shockwave01.png';
+                        ctx.drawImage(shockwaveImage, item.x - 50, item.y, 70, 70);
+                    };
+                    if (item.direction == 2) {
+                        shockwaveImage.src = './我的素材/shockwave02.png';
+                        ctx.drawImage(shockwaveImage, item.x + 50, item.y, 70, 70);
+                    };
+                    if (item.x > 0 && item.x < 1600 && !item.has_been_used) {   //recycle memory
+                        exist_shockwaves.push(item);
+                    };
+                });
+            };
+
+            if (shockwavesHit.length) {
+                shockwavesHit.forEach((item) => {
+                    shockwaveHitImage.src = './我的素材/onhit01.png';
+                    if (item.category == 5) {
+                        ctx.drawImage(shockwaveHitImage, item.x, item.y, 210, 175);
+                    } else {
+                        ctx.drawImage(shockwaveHitImage, item.x, item.y, 90, 90);
+                    };
+                });
+            };
+
+            if (heroLives.length) {
+                let life_x = 1420;
+                heroLives.forEach(life => {
+                    ctx.drawImage(heroLivesImage, life_x, 20, 30, 30);
+                    life_x += 35;
+                })
+            }
+
+            //render level
+            if (monstersKill >= 30) {
+                game_level = 2;
+            };
+            if (monstersKill >= 200) {
+                game_level = 3;
+            };
+            switch (game_level) {
+                case 1:
+                    gameLevelImage.src = './我的素材/level1.png';
+                    ctx.drawImage(gameLevelImage, 680, 20, 225, 89);
+                    break;
+                case 2:
+                    gameLevelImage.src = './我的素材/level2.png';
+                    ctx.drawImage(gameLevelImage, 680, 20, 225, 89);
+                    break;
+                case 3:
+                    gameLevelImage.src = './我的素材/level3.png';
+                    ctx.drawImage(gameLevelImage, 680, 20, 225, 89);
+                    break;
+            };
+
+
+            shockwaves = exist_shockwaves;
+            monsters = exist_monsters;
+            // Score
+            ctx.fillStyle = "rgb(44, 62, 80)";
+            ctx.font = "36px Helvetica bolder";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText("Your Score: " + monstersKill, 80, 20);
+            ctx.fillText("Your Lives: " + heroLives.length, 1200, 20);
+
+        };
+
+        const generateMonster = () => {
+            let monster_category = 1;  // boss = 5 , little monster = 1-4 
+            let monster_speed = 20;
+            switch (game_level) {
+                case 1:
+                    monster_speed = 20;
+
+                    break;
+                case 2:
+                    monster_category = parseInt(Math.random() * 5) + 1;
+                    monster_speed = 50;
+                    if (monster_category == 5) {
+                        monster_speed = 5;
+                    }
+                    break;
+                case 3:
+                    monster_category = 5;
+                    monster_speed = 15;
+                    break;
+            };
+            let monster_health = 1;
+            if (monster_category == 5) {
+                monster_health = 10;
+            };
+            let monster_direction = parseInt(Math.random() * 2) + 1;
+            let monster_y = parseInt(Math.random() * 400) + 300;
+            let monster_x = '';
+            if (monster_direction == 1) {
+                monster_x = 1700;
+            };
+            if (monster_direction == 2) {
+                monster_x = -100;
+            };
+            monsters.push({
+                speed: monster_speed, // movement in pixels per second
+                x: monster_x,
+                y: monster_y,
+                direction: monster_direction,
+                category: monster_category,
+                health: monster_health,
+            });
+        };
+
+
+        const removeHitEffect = () => {
+            shockwavesHit.shift();
+        };
+
+        // Reset the game when the player catches a monster
+        const reset = () => {
+            hero.x = canvas.width / 2;
+            hero.y = canvas.height / 2;
+        };
+
+
+        // The main game loop
+        let mainLoop = null;
+        const main = () => {
+            let now = Date.now();
+            let delta = now - then;
+            update(delta / 1000);
+            render();
+            then = now;
+            if ((now - function_loop_time) / 1000 >= 0.3) {       //removeHitEffect setInterval
+                removeHitEffect();
+            };
+            if ((now - function_loop_time) / 1000 >= 1) {     //generateMonster setInterval
+                generateMonster();
+                function_loop_time = now;
+            };
+
+            // Request to do this again ASAP
+            mainLoop = requestAnimationFrame(main);
+        };
+
+        //game start
+        let function_loop_time = Date.now();
+        let then = Date.now();
+        reset();
+        closeIntroBtn.addEventListener('click', () => {
+            $('#game_intro').modal('hide');
+            main();
+            backgroundMusicAudio.play();
+        });
+
+        //resize window when enter
+        window.onload = () => {
+            window.visualViewport.width = '1920px';
+            window.visualViewport.height = '943px';
+            $('#game_intro').modal('show');
+        };
+
+
+    </script>
+</body>
+
+</html>

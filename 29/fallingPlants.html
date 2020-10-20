@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盆栽掉下來硬幣撿起來</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="./fallingPlants.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row1">
+            <div class="game-display-area mx-auto my-2">
+                <div class="balcony mx-auto">
+                    <img src="./img/window.png" alt="">
+                    <img src="./img/window.png" alt="">
+                    <img src="./img/window.png" alt="">
+                    <img src="./img/window.png" alt="">
+                    <img src="./img/window.png" alt="">
+                    <img src="./img/window.png" alt="">
+                </div>
+                <div class="road"></div>
+                <div class="elderly">
+                    <div class="blood"><img src="./img/blood.png" alt=""></div>
+                    <img src="./img/elderly.png" alt="">
+                </div>
+                <div id="plant"></div>
+                <div id="coin"></div>
+                <div class="info mx-auto"></div>
+                <div class="info2 mx-auto">開始遊戲</div>
+                <div class="hp-bar d-flex align-items-center">
+                    <div class="hp-word mr-2">HP:</div>
+                    <div class="hp-border">
+                        <div class="hp"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="game-control-area mx-auto">
+                <button class="btn btn-danger" id="leftBtn">←</button>
+                <button class="btn btn-danger" id="rightBtn">→</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="rule mx-auto mt-2 text-left">
+                <ul class="font-weight-bold">
+                    <p class="text-center">遊戲規則：</p>
+                    <li>使用← →操縱行人左右移動，</li>
+                    <li>遭盆栽砸傷一次扣20%血值；</li>
+                    <li>撿到硬幣一枚回補10%血值；</li>
+                    <li>愛護行人‧你我有責。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="./fallingPlants.js"></script>
+</body>
+
+</html>

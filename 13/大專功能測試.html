@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JQ客製化便當功能測試 - drag&drop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+        [draggable="true"] {
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        #drag-drop-basic {
+            display: flex;
+        }
+
+        #source-container {
+            height: 400px;
+            border: 2px solid #CCC;
+            flex: 1;
+            margin: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #target-container {
+            height: 400px;
+            width: 200px;
+            border: 2px solid #CCC;
+            flex: 1;
+            margin: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .drag-source {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            border-radius: 50%;
+            background-color: steelblue;
+        }
+
+        .changeOpacity {
+            opacity: .25;
+        }
+
+        .changeColor {
+            background-color: rgb(255, 241, 202);
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="drag-drop-basic">
+        <div id="source-container" class="drag-drop-container drag-drop-containerA">
+            <!-- drag-source 開始 -->
+            <div class="drag-source" id="drag-source1" draggable="true">drag-source1</div>
+            <div class="drag-source" id="drag-source2" draggable="true">drag-source2</div>
+            <div class="drag-source" id="drag-source3" draggable="true">drag-source3</div>
+            <div class="drag-source" id="drag-source4" draggable="true">drag-source4</div>
+            <div class="drag-source" id="drag-source5" draggable="true">drag-source5</div>
+            <!-- drag-source 結束 -->
+        </div>
+        <!-- drop-target開始 -->
+        <div id="target-container" class="drag-drop-container drag-drop-containerB"></div>
+        <!-- drop-target結束 -->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        // JQ寫法
+        
+        // HTML5中提供的Drag & Drop事件, 對象分為 Drag Source 與 Drop Target
+        // drag事件中屬於Drag Source者包含 1.dragstart 2.drag 3.dragend 
+        // dragstart => 點住元素並拖曳時的瞬間觸發   drag => 拖曳中持續觸發   dragend => 放開被拖曳元素時觸發
+        // drag事件中屬於Drop Target者包含 1.dragenter 2.dragover 3.dragleave 4.drop
+        // dragenter => 被拖曳者進入放置元素時觸發   dragover => 被拖曳者在放置元素內時持續觸發   dragleave => 被拖曳元素離開放置元素時觸發   drop => 滑鼠放開drag-source時觸發 
+        // drop事件
+        // 要判定誰是Drag Source => 在元素加上draggable="true"屬性
+
+        let target
+
+        // .each(function(index, el){})寫法
+        // console.log($('[draggable="true"]').each(function (index, el) {
+        // console.log(item)
+        // }))
+
+        // 針對target的事件
+        $('[draggable="true"]').each(function (index, el) {
+            $(el).on({
+                dragstart: function (e) {
+                    console.log('hi')
+                    // console.log(e.target)
+                    target = e.target
+                    console.log('drag時的e.target: ', target)
+                    // setData('text/plain', e.target.id) 告知 drop target 哪個是被拖曳中的drag source
+                    // dataTransfer為drag事件獨有的物件
+                    e.originalEvent.dataTransfer.setData('text/plain', e.target.id)
+                    // e.dataTransfer.clearData()
+                    // console.log(e.dataTransfer)
+                    this.classList.add('changeOpacity') // this 指向 drag-source
+                },
+                dragend: function (e) {
+                    this.classList.remove('changeOpacity') // this 指向 drag-source
+                }
+            })
+        })
+
+
+
+        // 針對soruce的事件
+        $('.drag-drop-container').each(function (index, el) {
+            $(el).on({
+                dragover: function (e) {
+                    e.preventDefault()
+                    this.classList.remove('changeOpacity') // this 指向 drag-source
+                },
+                dragenter: function (e) {
+                    // e.preventDefault()
+                    // console.log(this) // 無論如何都指向drop Target
+                    // console.log(e.target) // 如果drop的點是原點 e.target指向dataSource / 如果drop的點是drop Target e.target指向drop Target
+                    if (this != e.target) { return }
+                    else { this.classList.add('changeColor') }
+                },
+                dragleave: function (e) {
+                    console.log('1111111')
+                    // console.log(this) // 無論如何都指向drop Target
+                    // console.log(e.target) // 如果drop的點是原點 e.target指向dataSource / 如果drop的點是drop Target e.target指向drop Target
+                    if (this != e.target) { return }
+                    else { this.classList.remove('changeColor') }
+                },
+                dragleave: function (e) {
+                    // console.log(this) // 無論如何都指向drop Target
+                    // console.log(e.target) // 如果drop的點是原點 e.target指向dataSource / 如果drop的點是drop Target e.target指向drop Target
+                    if (this != e.target) { return }
+                    else { this.classList.remove('changeColor') }
+                },
+                drop: function (e) {
+                    console.log('aaaa')
+                    console.log(e)
+                    let id = e.originalEvent.dataTransfer.getData('text/plain')
+                    console.log('dropped的dataTransfer: ', id)
+                    console.log('dropped的e.target.id: ', e.target.id)
+                    console.log('dropped的this.id: ', this.id) // 無論如何都指向drop Target
+                    console.log('dropped的e.target: ', e.target) // 如果drop的點是原點 e.target指向dataSource / 如果drop的點是drop Target e.target指向drop Target
+
+                    if (this != e.target) { return }
+                    else { e.target.appendChild(document.querySelector('#' + id)) }
+                    this.classList.remove('changeColor')
+                },
+            })
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+body {
+  background: #ffaf60;
+  /* cursor: url("/img/hammer.ico"), auto; */
+}
+.scorebar {
+  color: white;
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: sans-serif;
+  margin: 20px 0;
+}
+
+.countdown {
+  position: fixed;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  margin: 0 auto;
+  width: 600px;
+  height: 600px;
+  color: #101010;
+  font-size: 3rem;
+  font-weight: 500;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.countdown span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  color: #101010;
+}
+
+.holes {
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+  background-color: #6c6c6c;
+  border-radius: 20px;
+  cursor: url("/img/hammer.ico"), auto;
+}
+
+.holewrap {
+  display: flex;
+}
+
+.hole {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.hole img {
+  position: absolute;
+  width: 95%;
+}
+
+.hole img.boom {
+  z-index: 1;
+  visibility: hidden;
+}
+
+.hole img.mouse {
+  width: 50%;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  visibility: hidden;
+}
+
+.notice {
+  padding-top: 50px;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  visibility: hidden;
+}
+
+.minus,
+audio {
+  visibility: hidden;
+}

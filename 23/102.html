@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link href="http://jqmdesigner.appspot.com/gk/lib/jquery.mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+  <!-- Export CSS  -->
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+    #index-menu img{
+    }
+    .menu-img img{
+      margin:5px;
+      width:90%;
+    }
+    
+    #home {
+      padding: 0;
+      margin: 0;
+      height: 75%;
+      width: 100%;
+    }
+    .ui-content {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      background:#fff;
+    }
+    #boxArea {
+      position: relative;
+      margin-top: 15px;
+      margin-bottom:20px;
+    }
+    #end-image{
+      position: absolute;
+      z-index: 3;
+      background-repeat: no-repeat;
+      border: 1px solid #000;
+      margin-top: 15px;
+      margin-bottom:20px;
+      display:none;
+    }
+    .box {
+      position: absolute;
+      z-index: 2;
+      background-repeat: no-repeat;
+      border: 1px solid #000;
+      cursor: pointer;
+    }
+    .box h2{
+      margin:0;
+      padding:0;
+      background:rgba(0,0,0,.5);
+      color:#fff;
+      max-width:15%;
+      font-size:12px;
+      font-weight:normal;
+      text-shadow:none;
+      text-align:center;
+      display:none;
+    }
+    #empty {
+      position: absolute;
+      background-color: #fff;
+      z-index: 1;
+      border: 1px solid #fff;
+    }
+    #tap-num,#play-time{
+      text-align:center;
+      padding:0;
+      margin:0;
+      font-size:16px;
+    }
+    #completed{
+      color:#f00;
+      text-align:center;
+      display:none;
+      padding:0;
+      margin:0;
+    }
+    .redcolor{
+      color:#f60;
+    }
+  </style>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>
+    $(document).on("mobileinit", function () {
+      $.mobile.autoInitializePage = false;
+      $.mobile.hashListeningEnabled = false;
+    });
+
+    function mobileInitPage() {
+      $.mobile.hashListeningEnabled = true;
+      $.mobile.initializePage();
+    };
+  </script>
+  <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <!-- Uncomment the following to include cordova in your android project -->
+  <!--<script src="http://jqmdesigner.appspot.com/platforms/android/cordova.js"></script>-->
+  <!-- GK Loader use RequireJS to load module -->
+  <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
+  <!--Plug in GK-->
+  <script src="http://jqmdesigner.appspot.com/components/jquery.gk/jquery.gk.min.js"></script>
+  <!-- Load GK components -->
+  <script components="http://jqmdesigner.appspot.com/components/gk-jquerymobile/content.html,http://jqmdesigner.appspot.com/components/gk-ext/gk-text.html,http://jqmdesigner.appspot.com/components/gk-jquerymobile/grid.html,http://jqmdesigner.appspot.com/components/gk-jquerymobile/page.html,http://jqmdesigner.appspot.com/components/gk-jquerymobile/block.html,http://jqmdesigner.appspot.com/components/gk-jquerymobile/header.html"
+  callback="mobileInitPage" src="http://jqmdesigner.appspot.com/components/gk-loader/gk-loader.js"></script>
+  <!-- Export JS  -->
+  <script>
+    var bgUrl;
+    /*  
+     ** #index
+     */
+    (function () {
+      $(document).on('pageshow', '#index', function () {
+
+        var $menuImg = $('.menu-img');
+
+        $menuImg.on('tap', function () {
+          bgUrl = $(this).find('img').attr('src');
+        });
+
+        $('#ready-img').removeAttr('src');
+
+      });
+    })();
+
+    /*  
+     ** #ready
+     */
+    (function () {
+      $(document).on('pageshow', '#ready', function () {
+
+        var $readyImg = $('#ready-img');
+
+        $readyImg.removeAttr('src');
+        $readyImg.attr({
+          'src': bgUrl
+        });
+        $('#play-time,.box').css({
+          'background': 'none'
+        });
+
+      });
+    })();
+
+    /*  
+     ** #home
+     */
+    (function () {
+      $(document).on('pageshow', '#home', function () {
+        var $box = $('.box'),
+          $empty = $('#empty'),
+          $boxArea = $('#boxArea'),
+          $tapNum = $('#tap-num'),
+          $playTime = $('#play-time'),
+          $endImage = $('#end-image'),
+          windowWidth = $('#home').width(),
+          windowHeight = $('#home').height(),
+          a = [],
+          boxSize, a1, a2, random1, random2, x0, y0, x1, y1, i, j,
+          $boxArea_x, $boxArea_y, aIndex, aEmpty, timer, moveNum, playtime;
+
+        _home();
+
+        function _home() {
+          //初始化
+          moveNum = 0;
+          playtime = 0;
+          a = [0, 1, 2, 3, 4, 5, 6, 7];
+          clearTimeout(timer);
+          $('#pause').removeClass('ui-state-disabled');
+          $('#show-num,#pause').removeClass('ui-btn-active').off('tap');
+          $('#restart,#back-index').off('tap');
+          $box.off('tap');
+          $tapNum.find('i').text('0');
+          $playTime.find('i').text('0');
+          $('#completed').hide();
+          $endImage.hide();
+
+          $endImage.css({
+            'background': 'url(' + bgUrl + ')'
+          });
+          $box.css({
+            'background': 'url(' + bgUrl + ')'
+          });
+
+          //設定計時器
+          _time();
+
+
+          //設定 box 的位置
+          if (windowWidth < windowHeight) {
+            if (windowWidth >= 420) {
+              boxSize = (420 - 40) / 3;
+            } else {
+              boxSize = (windowWidth - 40) / 3;
+            }
+            _boxPos(boxSize);
+          } else {
+            if (windowHeight >= 420) {
+              boxSize = (420 - 40) / 3;
+            } else {
+              boxSize = (windowHeight - 40) / 3;
+            }
+            _boxPos(boxSize);
+          }
+
+          //把原本的陣列打散
+          for (i = 0; i < 20; i++) {
+            random1 = Math.floor(Math.random(10) * 8);
+            _randomNum(random1);
+            a1 = a[random1];
+            a2 = a[random2];
+            a[random1] = a2;
+            a[random2] = a1;
+            if (i == 19) {
+              _addID(); //加 id
+            }
+          }
+
+          //點選事件
+          $box.on('tap', _play);
+
+          //footer按鈕事件
+          $('#pause').on('tap', function () {
+            if ($(this).hasClass('ui-btn-active')) {
+              $(this).removeClass('ui-btn-active');
+              _time();
+              $box.on('tap', _play);
+            } else {
+              $(this).addClass('ui-btn-active');
+              clearTimeout(timer);
+              $box.off('tap');
+            }
+          });
+
+          $('#show-num').on('tap', function () {
+            if ($(this).hasClass('ui-btn-active')) {
+              $(this).removeClass('ui-btn-active');
+              $box.find('h2').hide();
+            } else {
+              $(this).addClass('ui-btn-active');
+              $box.find('h2').show();
+            }
+          });
+
+          $('#restart').on('tap', function () {
+            _home();
+          });
+
+          $('#back-index').on('tap', function () {
+            bgUrl = '';
+            clearTimeout(timer);
+          });
+        }
+
+        /*
+         **********
+         */
+
+        function _play() {
+          x0 = $(this).offset().left;
+          y0 = $(this).offset().top;
+          x1 = $empty.offset().left;
+          y1 = $empty.offset().top;
+
+          d = Math.abs(x0 - x1) + Math.abs(y0 - y1);
+
+          if (d < (boxSize + 20)) {
+            $(this).animate({
+              "left": (x1 - $boxArea_x) + "px",
+              "top": (y1 - $boxArea_y) + "px"
+            }, 100);
+            $empty.css({
+              "left": (x0 - $boxArea_x) + "px",
+              "top": (y0 - $boxArea_y) + "px"
+            });
+
+            //計算步數
+            moveNum = moveNum + 1;
+            $tapNum.find('i').text(moveNum);
+
+            //判斷是否完成
+            aIndex = $(this).attr('num') * 1;
+            aEmpty = a.indexOf(8);
+            a[a.indexOf(aIndex)] = 8;
+            a[aEmpty] = aIndex;
+            _checkCompleted(a);
+          }
+        };
+
+        function _boxPos(s) {
+          $boxArea.css({
+            'width': (s * 3) + 'px',
+            'height': (s * 3) + 'px',
+            'margin-left': (windowWidth - (s * 3) - 4) / 2 + 'px'
+          });
+          $endImage.css({
+            'width': (s * 3 + 4) + 'px',
+            'height': (s * 3 + 4) + 'px',
+            'margin-left': (windowWidth - (s * 3) - 4) / 2 + 'px',
+            'background-size': (s * 3 + 4) + 'px ' + (s * 3 + 4) + 'px'
+          })
+
+          $boxArea_x = $boxArea.offset().left;
+          $boxArea_y = $boxArea.offset().top;
+
+          $box.css({
+            'width': s + 'px',
+            'height': s + 'px',
+            'background-size': (s * 3) + 'px ' + (s * 3) + 'px'
+          });
+          $empty.css({
+            'width': s + 'px',
+            'height': s + 'px'
+          })
+
+          $box.slice(0, 3).css({
+            'top': '0'
+          });
+          $box.slice(3, 6).css({
+            'top': s + 1 + 'px'
+          });
+          $box.slice(6, 9).css({
+            'top': s * 2 + 2 + 'px'
+          });
+          $box.eq(0).css({
+            'left': '0'
+          });
+          $box.eq(3).css({
+            'left': '0'
+          });
+          $box.eq(6).css({
+            'left': '0'
+          });
+          $box.eq(1).css({
+            'left': s + 1 + 'px'
+          });
+          $box.eq(4).css({
+            'left': s + 1 + 'px'
+          });
+          $box.eq(7).css({
+            'left': s + 1 + 'px'
+          });
+          $box.eq(2).css({
+            'left': s * 2 + 2 + 'px'
+          });
+          $box.eq(5).css({
+            'left': s * 2 + 2 + 'px'
+          });
+          $empty.css({
+            'left': s * 2 + 2 + 'px',
+            'top': s * 2 + 2 + 'px'
+          });
+        }
+
+        function _randomNum(r) {
+          random2 = Math.floor(Math.random(10) * 8);
+          if (random2 == r) {
+            _randomNum(r);
+          } else {
+            return random2;
+          }
+        }
+
+        function _addID() {
+          for (j = 0; j < a.length; j++) {
+            $box.eq(j).attr({
+              'id': 'box' + a[j],
+              'num': a[j]
+            }).html(
+              '<h2>' + (a[j] + 1) + '</h2>'
+            );
+            if (j == (a.length - 1)) {
+              return _bgPos(boxSize); //放入背景圖
+            }
+          }
+        }
+
+        function _bgPos(s) {
+
+          a.push(8);
+
+          $('#box0').css({
+            'background-position': '0 0'
+          });
+          $('#box1').css({
+            'background-position': (-s) + 'px 0'
+          });
+          $('#box2').css({
+            'background-position': (-s * 2) + 'px 0'
+          });
+          $('#box3').css({
+            'background-position': '0 ' + (-s) + 'px'
+          });
+          $('#box4').css({
+            'background-position': (-s) + 'px ' + (-s) + 'px'
+          });
+          $('#box5').css({
+            'background-position': (-s) * 2 + 'px ' + (-s) + 'px'
+          });
+          $('#box6').css({
+            'background-position': '0 ' + (-s * 2) + 'px'
+          });
+          $('#box7').css({
+            'background-position': (-s) + 'px ' + (-s * 2) + 'px'
+          });
+        }
+
+        function _time() {
+          timer = setTimeout(function () {
+            playtime = playtime + 1;
+            $playTime.find('i').text(playtime);
+            clearTimeout(timer);
+            _time();
+          }, 1000);
+        }
+
+        function _checkCompleted(c) {
+          if (c[0] == 0 && c[1] == 1 && c[2] == 2 && c[3] == 3 && c[4] == 4 && c[5] == 5 && c[6] == 6 && c[7] == 7) {
+            clearTimeout(timer);
+            $box.off('tap');
+            $('#pause').off('tap').addClass('ui-state-disabled');
+            $('#completed').show();
+            $endImage.fadeIn(500);
+            $tapNum.find('i').css({
+              'color': '#f80'
+            });
+            $playTime.find('i').css({
+              'color': '#f80'
+            });
+          }
+        }
+
+      });
+    })();
+  </script>
+  <title>EZo App</title>
+</head>
+
+<body gk-app>
+  <!-- Page: index  -->
+  <div id="index" data-role="page" is="page">
+    <div is="header" data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" id="boxheader">
+      <h3>九宮格拼圖遊戲</h3>
+    </div>
+    <div role="main" class="ui-content" is="content" id="index-menu">
+      <h2 is="gk-text" style="text-align:center;">選擇圖片</h2>
+      <div is="grid" class="ui-grid-b" style="height:95px;margin:5px;">
+        <div is="block" class="ui-block-a menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh6.googleusercontent.com/-6PDJ4QwB9Bk/VGR3eAVBiEI/AAAAAAAA-ns/KOqTGkmv_Cc/s200/m1.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-b menu-img" style="height:100%;">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh6.googleusercontent.com/-LN9x0T2CZg4/VGR3eIjtMJI/AAAAAAAA-nA/-QFh7RILKf0/s200/m2.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-c menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh5.googleusercontent.com/-E3TrlezsxkM/VGR3eC4kVGI/AAAAAAAA-nQ/auxkZ4e5RUw/s200/m3.jpg">
+          </a>
+        </div>
+      </div>
+      <div is="grid" class="ui-grid-b" style="height:95px;margin:5px;">
+        <div is="block" class="ui-block-a menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh4.googleusercontent.com/-JUebsAWF9AY/VGR3fMojZTI/AAAAAAAA-nE/vtrEDvpo6Iw/s200/m4.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-b menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh3.googleusercontent.com/-kZuaznMT8Yo/VGR3fhMQh5I/AAAAAAAA-nU/df9FM2vULXQ/s200/m5.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-c menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh3.googleusercontent.com/-iuu_vmYMhnY/VGR3gSENZLI/AAAAAAAA-nY/UhqpV0o523k/s200/m6.jpg">
+          </a>
+        </div>
+      </div>
+      <div is="grid" class="ui-grid-b" style="height:95px;margin:5px;">
+        <div is="block" class="ui-block-a menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh6.googleusercontent.com/-XaBSngRWQlE/VGR3g-LuBkI/AAAAAAAA-nw/Dp_vK-Cf83c/s200/m7.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-b menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh4.googleusercontent.com/-c5OGESz88-0/VGR3hSIm3vI/AAAAAAAA-n4/DF_gKptniPY/s200/m8.jpg">
+          </a>
+        </div>
+        <div is="block" class="ui-block-c menu-img" style="height:100%">
+          <a href="#ready" data-transition="slide">
+            <img src="https://lh5.googleusercontent.com/-n7VO1K9Yv1A/VGR3iasPQoI/AAAAAAAA-n0/G0HKpG9lmI0/s200/m9.jpg">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Page: ready  -->
+  <div id="ready" data-role="page" is="page">
+    <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" id="boxheader">
+      <h3>九宮格拼圖遊戲</h3>
+      <a class="ui-btn ui-btn-left ui-icon-back ui-btn-icon-notext ui-corner-all" data-rel="back">重選</a>
+    </div>
+    <div role="main" class="ui-content" is="content">
+      <h2 is="gk-text" style="text-align:center;">準備好了嗎？</h2>
+      <h3 is="gk-text" style="text-align:center;">點選圖片開始遊戲</h3>
+      <h3 is="gk-text" style="text-align:center;"><a href="#home" data-transition="slide"><img src style="width:70%;" id="ready-img"></a></h3>
+    </div>
+    <a></a>
+  </div>
+  <!-- Page: home  -->
+  <div id="home" data-role="page">
+    <div data-role="header" data-position="fixed" data-theme="b" data-tap-toggle="false" id="boxheader">
+      <h3>九宮格拼圖遊戲</h3>
+    </div>
+    <!-- 拼圖內容  -->
+    <div role="main" class="ui-content">
+      <div id="end-image"></div>
+      <div id="boxArea">
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div class="box"></div>
+        <div id="empty"></div>
+      </div>
+      <h3 id="completed">恭喜過關</h3>
+      <h3 id="tap-num">你走了：<i>0</i> 步</h3>
+      <h3 id="play-time">經過時間：<i>0</i> 秒</h3>
+    </div>
+    <div data-position="fixed" data-role="footer" data-theme="b" data-tap-toggle="false" style="padding:0; height:60px;">
+      <div class="ui-grid-c" style="height:100%; margin:0; padding:0">
+        <div class="ui-block-a" style="height:100%; margin:0; padding:0;">
+          <a id="back-index" class="ui-btn ui-btn-icon-top ui-icon-bars" style="height:100%; width:100%; padding:0; line-height:80px; margin:0;" href="#index" data-transition="flip">回主選單</a>
+        </div>
+        <div class="ui-block-b" style="height:100%; margin:0;padding:0;">
+          <a id="show-num" class="ui-btn ui-btn-icon-top ui-icon-eye" style="height:100%; width:100%; padding:0; line-height:80px; margin:0;">顯示數字</a>
+        </div>
+        <div class="ui-block-c" style="height:100%">
+          <a id="pause" class="ui-btn ui-icon-clock ui-btn-icon-top" style="height:100%; width:100%; padding:0; line-height:80px; margin:0;">暫停</a>
+        </div>
+        <div class="ui-block-d" style="height:100%">
+          <a id="restart" class="ui-btn ui-icon-refresh ui-btn-icon-top" style="height:100%; width:100%; padding:0; line-height:80px; margin:0;">重新開始</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>homework</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <style>
+        body {
+            background: #FFECF5;
+        }
+
+        .wrap {
+            width: 450px;
+            height: 450px;
+            margin: 0 auto;
+            background: #339191;
+            margin-top: 50px;
+            border-left: 20px solid #339191;
+            border-radius: 20px;
+
+        }
+
+        .row {
+            width: 100%;
+            height: 150px;
+        }
+
+        .col {
+            width: 20%;
+            height: 150px;
+            border: 3px solid white;
+            float: left;
+            text-align: center;
+            font-size: 100px;
+            font-family: helvetica;
+            color: rgb(255, 255, 255);
+            cursor: pointer;
+        }
+
+
+        .player-1-color {
+            color: maroon;
+        }
+
+        .col:nth-child(1) {
+            border-left: none;
+        }
+
+        .col:nth-child(3) {
+            border-right: none;
+        }
+
+        .row:nth-child(1) .col {
+            border-top: none;
+            margin-top: 3px;
+        }
+
+        .row:nth-child(3) .col {
+            border-bottom: none;
+            margin-bottom: 3px;
+        }
+
+        .reset {
+            width: 450px;
+            padding: 10px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* .reset #playbutton{
+    width: 50px;
+    font-size: 20px;
+} */
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="row">
+            <div class="col box1"></div>
+            <div class="col box2"></div>
+            <div class="col box3"></div>
+        </div>
+        <div class="row">
+            <div class="col box4"></div>
+            <div class="col box5"></div>
+            <div class="col box6"></div>
+        </div>
+        <div class="row">
+            <div class="col box7"></div>
+            <div class="col box8"></div>
+            <div class="col box9"></div>
+        </div>
+    </div>
+    <div class="reset">
+        <button class="resetButton">Reset</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            var currentPlayer = "X";
+
+            $(".col").each(function () {
+                $(this).click(function () {
+                    $(this).html(currentPlayer);
+                    if (currentPlayer == "X") {
+
+                        currentPlayer = "O";
+
+                    }
+                    else {
+
+                        currentPlayer = "X";
+
+                    }
+                 
+                    checkWinner();
+                }
+                );
+            });
+
+
+            function changePlayer() {
+
+
+
+            }
+            $(".resetButton").click(function () {
+                reset()
+            });
+
+            function checkWinner() {
+
+                if (($(".box1").text() == 'O' && $(".box2").text() == 'O' && $(".box3").text() == 'O') || ($(".box4").text() == 'O' && $(".box5").text() == 'O' && $(".box6").text() == 'O') || ($(".box7").text() == 'O' && $(".box8").text() == 'O' && $(".box9").text() == 'O') || ($(".box1").text() == 'O' && $(".box4").text() == 'O' && $(".box7").text() == 'O') || ($(".box2").text() == 'O' && $(".box5").text() == 'O' && $(".box8").text() == 'O') || ($(".box3").text() == 'O' && $(".box6").text() == 'O' && $(".box9").text() == 'O') || ($(".box1").text() == 'O' && $(".box5").text() == 'O' && $(".box9").text() == 'O') || ($(".box3").text() == 'O' && $(".box5").text() == 'O' && $(".box7").text() == 'O')) {
+                    alert("O贏了!!");
+
+                    reset()
+                }
+
+                else if (($(".box1").text() == 'X' && $(".box2").text() == 'X' && $(".box3").text() == 'X') || ($(".box4").text() == 'X' && $(".box5").text() == 'X' && $(".box6").text() == 'X') || ($(".box7").text() == 'X' && $(".box8").text() == 'X' && $(".box9").text() == 'X') || ($(".box1").text() == 'X' && $(".box4").text() == 'X' && $(".box7").text() == 'X') || ($(".box2").text() == 'X' && $(".box5").text() == 'X' && $(".box8").text() == 'X') || ($(".box3").text() == 'X' && $(".box6").text() == 'X' && $(".box9").text() == 'X') || ($(".box1").text() == 'X' && $(".box5").text() == 'X' && $(".box9").text() == 'X') || ($(".box3").text() == 'X' && $(".box5").text() == 'X' && $(".box7").text() == 'X')) {
+                    alert("X贏了!!");
+                    reset()
+                }
+            }
+            function reset() {
+                $('.col').empty();
+
+            }
+
+
+        });
+
+
+
+    </script>
+
+</body>
+
+</html>

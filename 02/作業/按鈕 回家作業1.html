@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <!-- step  1 . 做出九張 卡片並排版 
+             2 . 創造一個陣列儲存九張卡
+             3 . 定義一個n 儲存 亂數 Math.floor(Math.random() * w.length)
+             4 . 把每次抽到的卡片 用 slice 剔除 避免重複抽取
+             5 . 每次抽到的卡片 addclass(active) 使他有翻過來的效果
+             6 . 每當使用者玩玩一關 removeclass(active)讓牌翻回去
+             7 . 把隱藏的下一關 打開 (remove attr (hidden))
+             8 . 使用trigger 模擬 玩家 按一次下一關 的 效果 ( 玩玩之後 自動幫玩家案 下一關 呈現 自動換關的感覺 之後如果要往回玩 可以自己案回去
+             9 . 按鈕之後 用attr (src, 圖片連結) 更換連結 (把要換的圖片 存到新的陣列中 利用 遍歷的方式更換)
+             10. 製作 遊戲邏輯 (如果輸入正確 要.. 如果輸入錯誤 給提示...)
+             11. 製作keyprss事件
+
+             ps 我使用settimeout 解決 提前洩漏謎底的問題 但是 如果玩家案太快會發生靈異事件(連結來不及更換導致 圖片混亂)
+             所以 請玩家 換完關之後 等兩秒再開始玩.......................
+  -->
+  <style>
+    .wrap {
+      margin: 100px auto;
+
+      perspective: 800px;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .card1 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card2 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card3 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card3 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card4 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card5 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card6 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card7 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card8 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .card9 {
+      position: relative;
+      width: 200px;
+      height: 240px;
+      transition: 1s;
+      transform-style: preserve-3d;
+    }
+    .active {
+      transform: rotateY(180deg);
+      left: 30px;
+      position: relative;
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+      font-size: 40px;
+      backface-visibility: hidden;
+    }
+    .card-front {
+      background-color: #f00;
+      width: 100%;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+    .www {
+      justify-content: center;
+    }
+  </style>
+  <body>
+    <div class="wrap container">
+      <div class="row">
+        <div class="card1 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/1.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card2 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/2.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card3 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/3.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card4 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/4.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card5 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/5.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card6 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/6.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card7 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/7.jpg" alt="" />
+          </div>
+        </div>
+
+        <div class="card8 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/8.jpg" alt="" />
+          </div>
+        </div>
+        <div class="card9 col-4">
+          <div class="card-front card-face w-100">猜猜我是啥</div>
+          <div class="card-back card-face">
+            <img src="./法鬥/9.jpg" alt="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row www">
+      <button id="a">猜猜我是誰</button>
+      <button id="aa">第一關</button>
+      <button id="b" hidden>第二關</button>
+      <button id="c" hidden>第三關</button>
+      <input type="text" name="" id="in" placeholder="你猜阿" />
+      <button type="submit" id="sub">送出</button>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let a = $("#a");
+      let b = $("#b");
+      let c = $("#c");
+      let aa = $("#aa");
+      let sub = $("#sub");
+      let inp = $("#in");
+
+      let input = $(":input");
+      let card1 = $(".card1");
+      let card2 = $(".card2");
+      let card3 = $(".card3");
+      let card4 = $(".card4");
+      let card5 = $(".card5");
+      let card6 = $(".card6");
+      let card7 = $(".card7");
+      let card8 = $(".card8");
+      let card9 = $(".card9");
+
+      let w = [card1, card2, card3, card4, card5, card6, card7, card8, card9];
+      $("#in").keypress(function (e) {
+        code = e.keyCode ? e.keyCode : e.which;
+
+        if (code == 13) {
+          if (card1.find("img").attr("src") == "./法鬥/1.jpg") {
+            if ($("#in").val() === "法鬥" || $("#in").val() === "法國鬥牛犬") {
+              alert("對拉");
+              $("#in").val("");
+              b.removeAttr("hidden");
+              b.trigger("click");
+            } else if ($("#in").val("") && $("#in").val() != "法鬥") {
+              alert("你在猜一次 提示一個字:法Q的法");
+            }
+          }
+        }
+      });
+      $("#in").keypress(function (e) {
+        code = e.keyCode ? e.keyCode : e.which;
+
+        if (code == 13) {
+          if (card1.find("img").attr("src") == "./法鬥2/1.jpg") {
+            if ($("#in").val() === "法鬥" || $("#in").val() === "法國鬥牛犬") {
+              alert("對拉 又是法鬥 想不到ㄅ");
+              $("#in").val("");
+              c.removeAttr("hidden");
+              c.trigger("click");
+            } else if ($("#in").val() && $("#in").val() != "法鬥") {
+              alert("你在猜一次 提示一個字:法Q的法");
+            }
+          }
+        }
+      });
+      $("#in").keypress(function (e) {
+        code = e.keyCode ? e.keyCode : e.which;
+
+        if (code == 13) {
+          if (card1.find("img").attr("src") == "./黑/1.jpg") {
+            if ($("#in").val() === "進擊的巨人") {
+              alert("對拉");
+              $("#in").val("");
+            } else if ($("#in").val() && $("#in").val() != "進擊的巨人") {
+              alert("你在猜一次 提示一個字:財源廣進的進");
+            }
+          }
+        }
+      });
+      a.click(function () {
+        let n = Math.floor(Math.random() * w.length);
+        w[n].addClass("active");
+        w.splice(n, 1);
+        if (w.length == 0) {
+          $("body").css("background", "black");
+        }
+      });
+      sub.click(function () {
+        if (card1.find("img").attr("src") == "./法鬥/1.jpg") {
+          if ($("#in").val() === "法鬥" || $("#in").val() === "法國鬥牛犬") {
+            alert("對拉");
+            $("#in").val("");
+            b.removeAttr("hidden");
+            b.trigger("click");
+          } else if ($("#in").val() && $("#in").val() != "法鬥") {
+            alert("你在猜一次 提示一個字:法Q的法");
+          }
+        }
+      });
+
+      sub.click(function () {
+        if (card1.find("img").attr("src") == "./法鬥2/1.jpg") {
+          if ($("#in").val() === "法鬥" || $("#in").val() === "法國鬥牛犬") {
+            alert("對拉 又是法鬥 想不到吧");
+            $("#in").val("");
+            c.removeAttr("hidden");
+            c.trigger("click");
+          } else if ($("#in").val() && $("#in").val() != "法鬥") {
+            alert("你在猜一次 提示一個字:法Q的法");
+          }
+        }
+      });
+      sub.click(function () {
+        if (card1.find("img").attr("src") == "./黑/1.jpg") {
+          number == 1;
+          if ($("#in").val() == "進擊的巨人") {
+            alert("算你厲害");
+          } else if ($("#in").val() && $("#in").val() != "進擊的巨人") {
+            alert("你在猜一次 提示你一個字 財源廣進的進");
+          }
+        }
+      });
+
+      aa.click(function () {
+        w = [card1, card2, card3, card4, card5, card6, card7, card8, card9];
+        z = [
+          "./法鬥/1.jpg",
+          "./法鬥/2.jpg",
+          "./法鬥/3.jpg",
+          "./法鬥/4.jpg",
+          "./法鬥/5.jpg",
+          "./法鬥/6.jpg",
+          "./法鬥/7.jpg",
+          "./法鬥/8.jpg",
+          "./法鬥/9.jpg",
+        ];
+
+        $("body").css("background", "white");
+        $(".card-front").css("background", "red");
+        for (let i = 0; i < w.length; i++) {
+          w[i].removeClass("active");
+        }
+        setTimeout(() => {
+          for (let i = 0; i < w.length; i++) {
+            w[i].find("img").attr("src", z[i]);
+          }
+        }, 2000);
+        
+      });
+
+      b.click(function () {
+        w = [card1, card2, card3, card4, card5, card6, card7, card8, card9];
+        z = [
+          "./法鬥2/1.jpg",
+          "./法鬥2/2.jpg",
+          "./法鬥2/3.jpg",
+          "./法鬥2/4.jpg",
+          "./法鬥2/5.jpg",
+          "./法鬥2/6.jpg",
+          "./法鬥2/7.jpg",
+          "./法鬥2/8.jpg",
+          "./法鬥2/9.jpg",
+        ];
+
+        $("body").css("background", "white");
+        $(".card-front").css("background", "pink");
+        for (let i = 0; i < w.length; i++) {
+          w[i].removeClass("active");
+        }
+        setTimeout(() => {
+          for (let i = 0; i < w.length; i++) {
+            w[i].find("img").attr("src", z[i]);
+          }
+        }, 2000);
+
+      });
+      c.click(function () {
+        w = [card1, card2, card3, card4, card5, card6, card7, card8, card9];
+        z = [
+          "./黑/1.jpg",
+          "./黑/2.jpg",
+          "./黑/3.jpg",
+          "./黑/4.jpg",
+          "./黑/5.jpg",
+          "./黑/6.jpg",
+          "./黑/7.jpg",
+          "./黑/8.jpg",
+          "./黑/9.jpg",
+        ];
+
+        $("body").css("background", "white");
+        $(".card-front").css("background", "black");
+        for (let i = 0; i < w.length; i++) {
+          w[i].removeClass("active");
+        }
+        setTimeout(() => {
+          for (let i = 0; i < w.length; i++) {
+            w[i].find("img").attr("src", z[i]);
+          }
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>

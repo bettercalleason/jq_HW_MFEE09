@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #dddddd;
+        }
+
+        .box {
+            margin: 100px auto 0;
+            text-align: center;
+        }
+
+        .box1 {
+
+            margin-bottom: 30px;
+            margin: 50px auto;
+            width: 100px;
+
+        }
+
+        .box2 {
+            border-top: 1px solid #bbbbbb;
+            margin-top: 50px;
+            padding-top: 50px;
+            width: 650px;
+        }
+
+        img {
+            width: 100%;
+            animation-iteration-count: infinite;
+        }
+
+        button {
+            background-color: rgb(14, 201, 133);
+            color: rgb(14, 201, 133);
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+        }
+
+        .vertical {
+            -webkit-writing-mode: vertical-lr;
+            writing-mode: vertical-lr;
+        }
+
+        h3 {
+            position: relative;
+            top: -450px;
+            left: 1000px;
+
+        }
+
+        h4 {
+            position: relative;
+            top: -650px;
+            left: 950px;
+        }
+
+        h1 {
+            position: relative;
+            top: -850px;
+            left: 0;
+        }
+
+        h2 {
+            position: relative;
+            top: -850px;
+            left: 0;
+            color: red;
+            font-size: 50px;
+        }
+
+        button:hover {
+            background-color: rgb(0, 255, 162);
+            color: rgb(0, 255, 162);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="box box1">
+            <img class="animate__animated animate__heartBeat " src="./imgs/bomb.png" alt="">
+        </div>
+
+        <div class="box box2">
+
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>10</button>
+            <button>11</button>
+            <button>12</button>
+            <button>13</button>
+            <button>14</button>
+            <button>15</button>
+            <button>16</button>
+            <button>17</button>
+            <button>18</button>
+            <button>19</button>
+            <button>20</button>
+            <button>21</button>
+            <button>22</button>
+            <button>23</button>
+            <button>24</button>
+            <button>25</button>
+            <button>26</button>
+            <button>27</button>
+            <button>28</button>
+            <button>29</button>
+            <button>30</button>
+            <button>31</button>
+            <button>32</button>
+            <button>33</button>
+            <button>34</button>
+            <button>35</button>
+            <button>36</button>
+            <button>37</button>
+            <button>38</button>
+            <button>39</button>
+            <button>40</button>
+            <button>41</button>
+            <button>42</button>
+            <button>43</button>
+            <button>44</button>
+            <button>45</button>
+            <button>46</button>
+            <button>47</button>
+            <button>48</button>
+            <button>49</button>
+            <button>50</button>
+            <p class="mt-3">每局有五顆炸彈，沒踩到就加100分，踩到即結束遊戲</p>
+        </div>
+
+        <div>
+            <h3 class="text-center vertical">マインスイーパ</h3>
+            <h4 class="text-center vertical">
+                挑戦してみてください
+            </h4>
+        </div>
+        <div>
+            <h1></h1>
+            <h2 class="animate__animated"></h2>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+
+        function getRandom(x) {
+            return Math.floor(Math.random() * x) + 1;
+
+        };
+        let aRandom = getRandom(50);
+        let bRandom = getRandom(50);
+        let cRandom = getRandom(50);
+        let dRandom = getRandom(50);
+        let eRandom = getRandom(50);
+
+        console.log("aRandom:", aRandom);
+        console.log("bRandom:", bRandom);
+        console.log("bRandom:", cRandom);
+        console.log("bRandom:", dRandom);
+        console.log("bRandom:", eRandom);
+
+
+
+        let counter = 0;
+        $("button").click(function () {
+
+            let num = $(this).text();
+            console.log("num:", $(this).text());
+
+            if (num == aRandom || num == bRandom || num == cRandom || num == dRandom || num == eRandom) {
+                $("img").attr("src", "./imgs/bumbed.png")
+                $("img").removeClass("animate__heartBeat")
+                $("img").addClass("animate__tada")
+                $(this).css("background", "red");
+                $(this).css("color", "red");
+                alert("碰！！！");
+                $(".box1").css("width", "300px")
+                $(this).siblings().prop("disabled", true);
+                $(this).siblings().css("background", "gray");
+                $('p').css("background", "");
+                $(this).siblings().css("color", "gray");
+                $("h2").text(`Game over`);
+                $("h2").addClass("animate__fadeInUp");
+                $("h2").css("left", "-=35")
+            } else {
+                $(this).css("background", "gray");
+                $(this).css("color", "gray");
+                $(this).prop("disabled", true);
+                counter += 100;
+                $("h1").text(`${counter}点`)
+            }
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>

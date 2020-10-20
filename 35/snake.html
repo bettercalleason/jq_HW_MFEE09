@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style>
+
+        .btn-70px {
+            min-width: 70px;
+        }
+
+        .grid {
+            width: 25px;
+            height: 25px;
+            background-image: url("resources/snow.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .boundary {
+            background-image: url("resources/tree-snow.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .snake-head {
+            background-image: url("resources/santa-snow.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .snake-body {
+            background-image: url("resources/gift-snow.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .food {
+            background-image: url("resources/bells-snow.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .btn-235px {
+            width: 235px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container mt-5 d-flex">
+    <div class="px-2 align-self-start mr-5">
+        <div class="border rounded p-3">
+            <h4 class="text-center text-danger font-weight-bold">🎅 今年聖誕 🎅</h4>
+            <hr>
+            <h5>尺寸：</h5>
+            <button type="button" class="btn btn-info btn-sm mr-2 size btn-70px disabled-on-gaming" data-size="17">15 x
+                15
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm mr-2 size btn-70px disabled-on-gaming" data-size="22">
+                20 x
+                20
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm size btn-70px disabled-on-gaming" data-size="27">25 x
+                25
+            </button>
+            <h5 class="mt-5">速度：</h5>
+            <button type="button" class="btn btn-info btn-sm mr-2 interval btn-70px disabled-on-gaming"
+                    data-interval="150">正常
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm mr-2 interval btn-70px disabled-on-gaming"
+                    data-interval="100">快速
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm interval btn-70px disabled-on-gaming"
+                    data-interval="50">極速
+            </button>
+            <div>
+                <button type="button" id="start-btn"
+                        class="btn btn-danger text-white btn-sm mt-5 btn-235px disabled-on-gaming">&lt; 按空白鍵開始 &gt;
+                </button>
+            </div>
+        </div>
+    </div>
+    <div>
+        <table>
+            <tbody id="canvas"></tbody>
+        </table>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="resources/snake.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style type="text/css">
+      .box1 {
+        display: flex;
+        justify-content: space-around;
+      }
+      .box2 {
+        text-align: center;
+      }
+      .box3 {
+        margin-top: 5px;
+      }
+      #dvPuzzle {
+        width: 480px;
+        height: 480px;
+        border: solid 5px gainsboro;
+        padding: 0px;
+      }
+      .PicCell {
+        width: 118px;
+        height: 118px;
+        border-top: solid 1px white;
+        border-left: solid 1px white;
+        border-right: solid 1px gainsboro;
+        border-bottom: solid 1px gainsboro;
+        float: left;
+        overflow: hidden;
+      }
+      .over {
+        width: 100px;
+      }
+      .Hidden {
+        display: none;
+      }
+      .Block {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="text/javascript">
+      $(function () {
+        let posConv = {};
+        let count = 0;
+
+        // console.log("posConv:", posConv);
+
+        for (let i = 0; i < 16; i++) {
+          $("#dvPuzzle").append(
+            "<div class='PicCell' id='Pic" +
+              i +
+              "' data-id='" +
+              i +
+              "'><img src='Building.jpg' /></div>"
+          );
+
+          //console.log("#Pic.PicCell:", $("#Pic" + i + ".PicCell"));
+
+          let row = parseInt(i / 4);
+          let col = i % 4;
+          if (i == 15) console.log("row", row, "col", col);
+          $("#Pic" + i + " img")
+            .css("margin-left", col * -120 + 1)
+            .css("margin-top", row * -120 + 1);
+
+          posConv[i] = { row: row, col: col };
+          // console.log("posConv[i]:", posConv[i]);
+        }
+
+        //console.log("arr:", arr);
+
+        $("#Pic0 img").remove();
+
+        // let arr2 = [];
+
+        $(".PicCell").click(function () {
+          // let cells = $("#dvPuzzle div");
+          // let toCheck = getNearPos($(".PicCell").index($(this)));
+
+          // if (toCheck.length > 0) {
+          //   while (toCheck.length > 0) {
+          //     let j = toCheck.pop();
+          //     if (cells.eq(j).attr("id") == "Pic0") {
+          //       count++;
+          //       $("#count").text(count);
+          //     }
+          //   }
+          // }
+
+          moveBOX($(".PicCell").index($(this)), true);
+
+          testIsOver();
+        });
+
+        function getNearPos(i) {
+          let pool = [];
+          let row = posConv[i].row,
+            col = posConv[i].col;
+
+          if (row > 0)
+            //上
+            pool.push((row - 1) * 4 + col);
+          if (row < 3)
+            //下
+            pool.push((row + 1) * 4 + col);
+          if (col > 0)
+            //左
+            pool.push(i - 1);
+          if (col < 3)
+            //右
+            pool.push(i + 1);
+          return pool;
+        }
+
+        let isClick = false;
+
+        $("input:button").click(function () {
+          isClick = true;
+
+          $("#dvPuzzle").removeClass("Hidden");
+          $("#dvPuzzle").addClass("Block");
+          for (let i = 0; i < 500; i++) {
+            let cells = $("#dvPuzzle div");
+            let toMove = getNearPos(cells.index($("#Pic0")[0]));
+
+            console.log("to Move i:", i, toMove);
+            let randomBox = toMove[parseInt(Math.random() * toMove.length)];
+            console.log(randomBox);
+            moveBOX(randomBox, false);
+            // cells.eq().click();
+          }
+          count = 0;
+          testIsOver();
+        });
+
+        function checkOver() {
+          let isOver = true;
+          $(".PicCell").each(function (index) {
+            //console.log("index", index);
+            //console.log("this data-id:", $(this).data("id"));
+
+            if (index != $(this).data("id")) {
+              isOver = false;
+            }
+          });
+
+          //console.log("isOver", isOver);
+          return isOver;
+        }
+
+        function testIsOver() {
+          let result = checkOver();
+          if (result && isClick) {
+            $(".over").removeClass("Hidden");
+            $(".over").addClass("Block");
+            //console.log("yes its over");
+          } else {
+            $(".over").removeClass("Block");
+            $(".over").addClass("Hidden");
+            //console.log("no its not yet");
+          }
+        }
+
+        function moveBOX(boxNum, shoudCount) {
+          let cells = $("#dvPuzzle div");
+          let i = boxNum;
+          let isMove = false;
+          let toCheck = getNearPos(i);
+
+          while (toCheck.length > 0) {
+            let j = toCheck.pop();
+
+            if (cells.eq(j).attr("id") == "Pic0") {
+              if (shoudCount) count++;
+              if (i > j) {
+                let k = j;
+                j = i;
+                i = k;
+              }
+              let ahead = cells.eq(i);
+              let behind = cells.eq(j);
+              let behindPrev = behind.prev();
+
+              if (Math.abs(i - j) == 1) {
+                behind.after(ahead);
+              } else {
+                ahead.after(behind);
+                behindPrev.after(ahead);
+              }
+            }
+          }
+
+          $("#count").text(count);
+        }
+      });
+    </script>
+    <div class="box1">
+      <div>
+        <div id="dvPuzzle" class="Hidden"></div>
+        <div class="box2">
+          <input type="button" value="play" class="box3" />
+          <div class="box3" id="count"></div>
+          <div class="over Hidden box3"><p>成功！</p></div>
+        </div>
+      </div>
+
+      <div><img src="Building.jpg" /></div>
+    </div>
+  </body>
+</html>

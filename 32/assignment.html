@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./assignment.css" />
+    <style></style>
+  </head>
+  <body>
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-5 content mx-2 pr-0 overflow-hidden">
+          <ul>
+            <li class="item-01">item-01</li>
+            <li>item-02</li>
+            <li>
+              item-03
+              <ul>
+                <li>item-001</li>
+                <li>
+                  item-002
+                  <ul>
+                    <li>item0001</li>
+                    <li>item0002</li>
+                    <li>item0003</li>
+                  </ul>
+                </li>
+
+                <li>item-003</li>
+              </ul>
+            </li>
+
+            <li>item-04</li>
+          </ul>
+        </div>
+        <div class="col-3 display mx-2">
+          <div>現在位置</div>
+          <div id="locations"></div>
+        </div>
+
+        <div class="col-3 selector mx-2">
+          <div class="m-1">
+            <button class="btn btn-primary prev">上一個</button>
+          </div>
+          <div class="m-1">
+            <button class="btn btn-primary next">下一個</button>
+          </div>
+          <div class="m-1">
+            <button class="btn btn-primary parents">上一層</button>
+          </div>
+          <div class="m-1">
+            <button class="btn btn-primary children">下一層</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assignment.js"></script>
+  </body>
+</html>

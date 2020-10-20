@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <homework class="html"></homework>
+  </title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+</head>
+<style>
+  .box {
+    height: 200px;
+    width: 200px;
+    background-color: #6fb7b7;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 20px;
+  }
+
+  .box.back {
+    background-color: #d94600;
+    box-shadow: 10px 10px 125px 50px rgba(217, 70, 0, 1);
+  }
+
+  h5 {
+    margin-top: 50%;
+  }
+
+  p {
+    margin-top: 50%;
+  }
+
+  span {
+    font-size: 30px;
+  }
+
+  .food {
+    display: none;
+  }
+
+  .topword {
+    display: none;
+  }
+
+  h2 {
+    color: #d94600;
+    width: 100%;
+  }
+
+  .top-area {
+    height: 100px;
+  }
+
+  .foodImg {
+    width: 600px;
+    height: 600px;
+    margin-top: 150px;
+    object-fit: cover;
+  }
+
+  .btn-none {
+    display: none;
+  }
+</style>
+
+<body>
+  <div class="d-flex">
+    <div class="col-4 mt-5 ml-5 text-center">
+      <div class="top-area text-center">
+        <h2 class="topword mb-2"></h2>
+      </div>
+      <div class="row">
+        <div class="box box1" id="1">
+          <p class="food">鬍鬚張 經典滷肉飯便當</p>
+        </div>
+        <div class="box box2" id="2">
+          <p class="food">肯德基 10塊咔啦脆雞派對餐</p>
+        </div>
+        <div class="box box3" id="3">
+          <p class="food">鼎泰豐 松露小籠包</p>
+        </div>
+        <div class="box box8" id="8">
+          <p class="food">艋舺雞排 天王雞排套餐</p>
+        </div>
+        <div class="box">
+          <div id="start">
+            <h5><span>今晚</span>，我想來點...</h5>
+            <button class="auto btn btn-dark">小朋友才做選擇!!</button>
+          </div>
+        </div>
+        <div class="box box4" id="4">
+          <p class="food">麥當勞 辣味鷄腿中薯餐</p>
+        </div>
+        <div class="box box7" id="7">
+          <p class="food">Subway 培根雞肉潛艇堡</p>
+        </div>
+        <div class="box box6" id="6">
+          <p class="food">必勝客 燻雞絲蘑菇比薩</p>
+        </div>
+        <div class="box box5" id="5">
+          <p class="food">四海遊龍 塔香辣肉醬湯麵</p>
+        </div>
+      </div>
+      <h3 class="btn-none">不想吃這個，還是自己選好了...</h3>
+      <button class="btn-none left btn btn-dark">逆時針</button>
+      <button class="btn-none right btn btn-dark">順時針</button>
+    </div>
+
+    <div class="col-6">
+      <div class=""><img class="foodImg" src="./img/logo.jpg" alt="" /></div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script>
+    //console.log($("#f4").text())
+    $(".auto").on("click", function () {
+      let i = 0;
+      let t = 0;
+      let num = parseInt(Math.random() * 8 + 1);
+      $("p").addClass("food");
+      $("h2").addClass("topword");
+      $('.left').addClass('btn-none');
+      $('.right').addClass('btn-none');
+      $('h3').addClass('btn-none');
+      $(".foodImg").removeClass("animate__heartBeat");
+
+
+      change = setInterval(function () {
+        i++;
+        $(".foodImg").attr("src", `./img/${i}.jpg`);
+        if (i === 9) {
+          $(".foodImg").attr("src", `./img/1.jpg`);
+        }
+        console.log(i);
+        if (i > 8) {
+          i = 1;
+          t++;
+        }
+        $(".box").removeClass("back");
+        $(`#${i}`).addClass("back");
+
+        if (t == 4) {
+          if (i == num) {
+            $("p").removeClass("food");
+            $("h2").removeClass("topword");
+            clearInterval(change);
+            $("h2").html(`馬上下單：${$(`#${i}`).text()}`);
+            $(".foodImg").attr("src", `./img/${i}.jpg`);
+            console.log($(`#${i}`).text());
+            $('.left').removeClass('btn-none');
+            $('.right').removeClass('btn-none');
+            $('h3').removeClass('btn-none');
+            $(".foodImg").addClass("animate__heartBeat");
+
+
+
+          }
+        }
+      }, 100);
+    });
+
+    //   $(".left").click(function () {
+    //     $(`#f` + i).removeClass("back");
+    //     $(`#f` + i)
+    //       .prev()
+    //       .addClass("back");
+    //   });
+
+    $(".left").on("click", function () {
+      let idNum = parseInt($(".back").attr("id"));
+
+      if (idNum == 1) {
+        $("#8").addClass("back");
+        $("#1").removeClass("back");
+        $("h2").text(`馬上下單 :${$("#8").text()}`);
+        $(".foodImg").attr("src", "./img/8.jpg");
+      }
+      // console.log(idNum)
+      if (idNum > 1) {
+        idNum = idNum - 1;
+        let foodName = $(`#${idNum}`).text();
+        $("h2").text(`馬上下單:  ${foodName}`);
+        $(".foodImg").attr("src", `./img/${idNum}.jpg`);
+        $(`#${idNum}`).addClass("back");
+        idNum = idNum + 1;
+        $(`#${idNum}`).removeClass("back");
+      }
+    });
+
+    $(".right").on("click", function () {
+      let idNum = parseInt($(".back").attr("id"));
+      if (idNum == 8) {
+        $("#1").addClass("back");
+        $("#8").removeClass("back");
+        $("h2").text(`馬上下單 :${$("#1").text()}`);
+        $(".foodImg").attr("src", "./img/1.jpg");
+      }
+      if (idNum < 8) {
+        let idNum = parseInt($(".back").attr("id"));
+        idNum = idNum + 1;
+        let foodName = $(`#${idNum}`).text();
+        $(".foodImg").attr("src", `./img/${idNum}.jpg`);
+        $("h2").text(`馬上下單:  ${foodName}`);
+        $(`#${idNum}`).addClass("back");
+        idNum = idNum - 1;
+        $(`#${idNum}`).removeClass("back");
+      }
+    });
+  </script>
+</body>
+
+</html>

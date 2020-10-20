@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catch me if you can!</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.0/moment.min.js"></script>
+    <style>
+      .wrap {
+        position: relative;
+        width: 800px;
+        height: 400px;
+        background-color: #eee;
+        /* margin-bottom: 10vh; */
+        border-radius: 15px;
+      }
+
+      .btn_wrap {
+        text-align: center;
+        position: relative;
+        width: 800px;
+        margin: 3vh;
+      }
+
+      .wrap2 {
+        width: 100vw;
+        position: relative;
+        background-color: #eee;
+      }
+
+      .box {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        background-color: lightseagreen;
+        border-radius: 100px;
+      }
+
+      .box2 {
+        position: absolute;
+        top: 380px;
+        left: 780px;
+        width: 20px;
+        height: 20px;
+        background-color: rgb(240, 199, 86);
+        border-radius: 100px;
+      }
+
+      .countdown {
+        width: 250px;
+        height: 100px;
+        /* background: white; */
+        font-size: 2em;
+        color: grey;
+
+        /* Centering everything */
+        position: absolute;
+        left: 10%;
+        top: 20%;
+        margin-left: -125px;
+        margin-top: -50px;
+
+        text-align: center;
+        line-height: 100px;
+
+        /* border: 5px solid #e54b6a42; */
+        border-bottom: 5px solid #e54b6a8e;
+        /* background-image: linear-gradient(#bfeafd, rgb(250, 200, 170)); */
+        /* border-radius: 15px; */
+      }
+    </style>
+  </head>
+  <body>
+    <audio
+    id="music2"
+    src="Pac-man theme remix - By Arsenic1987.mp3"
+    loop="loop"
+  >
+  </audio>
+
+    <h1 class="mt-5" style="text-align: center">Catch me if you can!</h1>
+
+    <div class="countdown">20 sec</div>
+
+    <div class="wrap mx-auto mt-5">
+      <div class="box"></div>
+      <div class="box2"></div>
+    </div>
+    
+<div class="btn_wrap mx-auto mt-5" >
+<a href="javascript:playPause();">
+    
+      <button class="start btn btn-primary btn-lg" id="music_btn2">開始</button>
+      <!-- <button class="btn btn-primary">暫停</button> --> 
+    
+</a> 
+</div>
+
+    <div class="wrap2 d-flex">
+      <!-- 左邊 -->
+      <div class="py-3 text-center" style="margin-left: 6%">
+        <div class="py-1">
+          <button class="btn btn-info" id="S">S</button>
+        </div>
+
+        <div>
+          <button class="btn btn-info" id="Z" style="margin-right: 20px">
+            Z
+          </button>
+
+          <button class="btn btn-info" id="C" style="margin-left: 20px">
+            C
+          </button>
+        </div>
+
+        <div class="py-1">
+          <button class="btn btn-info" id="X">X</button>
+        </div>
+      </div>
+      <!-- 左邊結束 -->
+
+      <!-- 右邊 -->
+      <div class="py-3 text-center" style="margin-left: 75%">
+        <div class="py-1">
+          <button class="btn btn-warning" id="up">u</button>
+        </div>
+
+        <div>
+          <button class="btn btn-warning" id="left" style="margin-right: 20px">
+            <
+          </button>
+
+          <button class="btn btn-warning" id="right" style="margin-left: 20px">
+            >
+          </button>
+        </div>
+
+        <div class="py-1">
+          <button class="btn btn-warning" id="down">d</button>
+        </div>
+      </div>
+      <!-- 右邊結束 -->
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- 開始鍵相關功能 -->
+    <script>
+      // 倒數相關
+      var duration = moment.duration({
+        //   'minutes': 5,
+        seconds: 22,
+      });
+      var timestamp = new Date(0, 0, 0, 1, 10, 30);
+      var interval = 1;
+      // 倒數相關結束
+
+      $(".start").click(function () {
+        let a = $(".start").text();
+        // console.log(a);
+        if (a == "開始") {
+          $(".start").text("人參4沒有暫停這回事der");
+          $(".start").css("background", "orange").css("border", "orange");
+
+          // 連動點音樂鍵
+          $(".music").click;
+
+          // 倒數計時器
+          var timer = setInterval(function () {
+            timestamp = new Date(timestamp.getTime() + interval * 1000);
+
+            duration = moment.duration(
+              duration.asSeconds() - interval,
+              "seconds"
+            );
+            var min = duration.minutes();
+            var sec = duration.seconds();
+
+            sec -= 1;
+            if (min < 0) return clearInterval(timer);
+            if (min < 10 && min.length != 2) min = "0" + min;
+            if (sec < 0 && min != 0) {
+              min -= 1;
+              sec = 59;
+            } else if (sec < 10 && sec.length != 2) sec = "0" + sec;
+
+            $(".countdown").text(sec + "  " + "sec");
+            if (sec == 0) clearInterval(timer);
+            if (sec == 0)
+              setInterval(function () {
+                if (!isGameover) {
+                  alert("The left is Win~");
+                  isGameover = true;
+                }
+                location.reload();
+              }, 100);
+          }, 1000);
+          // 倒數計時器結束
+        } else {
+          $(".start").text("開始");
+          $(".start").css("background", "#007bff");
+        }
+      });
+    </script>
+
+    <!-- 右邊玩家 -->
+    <script>
+      $(document).on("keydown", function (e) {
+        // console.log("event:", e);看鍵盤號碼
+        let code2 = e.which;
+        let newLeft = parseInt($(".box2").css("left"));
+        let newTop = parseInt($(".box2").css("top"));
+
+        // 左
+        if (code2 === 37) {
+          if (newLeft > 0) {
+            $(".box2").css("left", "-=20");
+          }
+          // 上
+        } else if (code2 === 38) {
+          if (newTop > 0) {
+            $(".box2").css("top", "-=20");
+          }
+          // 右
+        } else if (code2 === 39) {
+          if (newLeft < 780) {
+            $(".box2").css("left", "+=20");
+          }
+          // 下
+        } else if (code2 === 40) {
+          if (newTop < 380) {
+            $(".box2").css("top", "+=20");
+          }
+        }
+
+        pass();
+      });
+    </script>
+
+    <!-- 左邊玩家 -->
+    <script>
+      let isGameover = false;
+      $(document).on("keydown", function (e) {
+        // console.log("event:", e);看鍵盤號碼
+        let code = e.which;
+        let newLeft = parseInt($(".box").css("left"));
+        let newTop = parseInt($(".box").css("top"));
+
+        if (code === 90) {
+          if (newLeft > 0) {
+            $(".box").css("left", "-=20");
+          }
+        } else if (code === 83) {
+          if (newTop > 0) {
+            $(".box").css("top", "-=20");
+          }
+        } else if (code === 67) {
+          if (newLeft < 800 - 20) {
+            $(".box").css("left", "+=20");
+          }
+        } else if (code === 88) {
+          if (newTop < 400 - 20) {
+            $(".box").css("top", "+=20");
+          }
+        }
+      });
+
+      function pass() {
+        // console.log($(".box").css("top"));
+        // console.log($(".box").css("left"));
+        // console.log($(".box2").css("top"));
+        // console.log($(".box2").css("left"));
+        if (
+          $(".box").css("top") == $(".box2").css("top") &&
+          $(".box").css("left") == $(".box2").css("left") &&
+          !isGameover
+        ) {
+          setTimeout(() => {
+            alert("The right is Win~");
+            location.reload();
+          }, 100);
+          isGameover = true;
+        }
+      }
+
+      // let a = $(".start").text();
+      // var intervalID = setInterval(function () {
+      //   if(!isGameover && a == "人參4沒有暫停這回事der"){
+      //     alert("The left is Win~");
+      //     isGameover = true;
+      //   }
+      // }, 3000);
+    </script>
+
+    <!-- 音樂 -->
+    <script>
+      function playPause() {
+        var music = document.getElementById("music2");
+        var music_btn = document.getElementById("music_btn2");
+        if (music.paused) {
+          music.play();
+          music_btn.src = "imgs/._person1.jpg";
+        } else {
+          function playPause() {
+            var music = document.getElementById("music2");
+            var music_btn = document.getElementById("music_btn2");
+            if (music.paused) {
+              music.play();
+              music_btn.src = "imgs/._person1.jpg";
+            } else {
+              music.pause();
+              music_btn.src = "imgs/._person2.jpg";
+            }
+          }
+          music.pause();
+          music_btn.src = "imgs/._person2.jpg";
+        }
+      }
+    </script>
+  </body>
+</html>

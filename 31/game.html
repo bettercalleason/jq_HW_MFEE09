@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>game</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+</head>
+<style>
+    body {
+        /* height: 300vh; */
+        background-color: #EAE1D8;
+
+    }
+
+    .box,
+    .box1,
+    .box2,
+    .box3,
+    .box4,
+    .box5,
+    .box6,
+    .box7 {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background-color: lightblue;
+        position: relative;
+        overflow: hidden;
+        margin: 30px 20px 20px;
+
+    }
+
+    .cat,
+    .cat1,
+    .cat2,
+    .cat3,
+    .cat4,
+    .cat5,
+    .cat6,
+    .cat7 {
+        width: 100%;
+        /* transform: translateY(-100); */
+        background-size: cover;
+        background-position: center;
+        transition: .5s;
+        transition-timing-function: ease-in;
+
+    }
+
+    .cat.active,
+    .cat1.active,
+    .cat2.active,
+    .cat3.active,
+    .cat4.active,
+    .cat5.active,
+    .cat6.active,
+    .cat7.active {
+        width: 100%;
+        /* display: none; */
+        position: absolute;
+        top: 150px;
+    }
+
+
+    .text {
+        display: inline-block;
+        /* margin: auto; */
+        font-size: 60px;
+        text-align: center;
+        margin-top: 45px;
+        margin-left: 110px;
+        /* color:lightblue; */
+    }
+
+
+    .text.active {
+        display: none;
+        /* margin: auto; */
+        font-size: 60px;
+        font-weight: 600;
+
+    }
+
+    .btn,
+    .btn1 {
+        margin: 40px 0px 20px;
+        height: 90px;
+        width: 430px;
+        font-size: 30px;
+        font-weight: 900;
+        line-height: 75px;
+    }
+
+    #restart {
+        display: none;
+        margin: auto;
+        line-height: 90px;
+        margin-top: 35px;
+
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="btn btn-warning text-center">ＳＴＡＲＴ</div>
+
+
+        </div>
+        <div class="row row1 justify-content-center">
+            <div class="box">
+                <img src="../images/st2_cat_kitten_1-2.svg" class="cat ">
+
+            </div>
+
+            <div class="box1">
+                <img src="../images/st4_cat_outdoor.svg" class="cat1 ">
+
+            </div>
+
+            <div class="box2">
+                <img src="../images/st2_cat_senior.svg" class="cat2 ">
+
+            </div>
+
+            <div class="box3">
+                <img src="../images/st4_cat_indoor.svg" class="cat3 ">
+
+            </div>
+        </div>
+
+        <div class="row row2 justify-content-center">
+            <div class="box4">
+                <img src="../images/st3_cat.svg" class="cat4 ">
+
+            </div>
+
+            <div class="box5">
+                <img src="../images/st4_cat_outdoor.svg" class="cat5 ">
+
+            </div>
+
+            <div class="box6">
+                <img src="../images/st2_cat_kitten_1-2.svg" class="cat6 ">
+
+            </div>
+
+            <div class="box7">
+                <img src="../images/st1_cat.svg" class="cat7 ">
+
+            </div>
+        </div>
+        <div class=" row point justify-content-between">
+            <p class="text"></p>
+            <div id="restart" class="btn1 btn-warning text-center">ＲＥＳＴＡＲＴ</div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <script>
+
+        let interval, timeoutID, timeoutID1, timeoutID2, timeoutID3, timeoutID4, timeoutID5, timeoutID6, timeoutID7;
+        let counters = 5;
+        let counter = 0;
+        let isGameOver = false;
+       
+       
+        $(".btn").click(gameStart);
+
+
+        function gameStart() {
+            interval = setInterval(function () {
+
+                counters--;
+                // Display 'counter' wherever you want to display it.
+                if (counters <= 0) {
+                    gameOver();
+                    // return;
+                } else {
+                    $('.btn').text(counters + '   ＳＥＣＯＮＤＳ');
+                    console.log("Timer --> " + counters);
+
+                }
+            }, 1000);
+
+            $(".cat, .cat1, .cat2, .cat3, .cat4, .cat5, .cat6, .cat7").click(function () {
+                if (!isGameOver) {
+                    $(this).parent().css("border", "8px solid #5F6B6B");
+
+                    setTimeout(function () {
+                        console.log("hi");
+                        $(".row").children().css("border", "none");
+
+                    }, 300);
+
+                    $(this).hide();
+
+                    console.log("click ok");
+
+                    counter += 1;
+                    $(".text").text(`${counter * 100}分`)
+
+                    setTimeout(function () {
+                        console.log("appear again");
+                        $("img:hidden").show();
+
+                    }, Math.floor(Math.random() * 4000 + 1000))
+                }
+
+
+            });
+
+
+            $(".row").children().css("cursor", "pointer");
+
+            timeoutID = setInterval((() => $(".cat").toggleClass('active')), 800);
+            timeoutID1 = setInterval((() => $(".cat1").toggleClass('active')), 600);
+            timeoutID2 = setInterval((() => $(".cat2").toggleClass('active')), 1000);
+            timeoutID3 = setInterval((() => $(".cat3").toggleClass('active')), 1800);
+            timeoutID4 = setInterval((() => $(".cat4").toggleClass('active')), 1000);
+            timeoutID5 = setInterval((() => $(".cat5").toggleClass('active')), 1200);
+            timeoutID6 = setInterval((() => $(".cat6").toggleClass('active')), 2600);
+            timeoutID7 = setInterval((() => $(".cat7").toggleClass('active')), 1400);
+
+            console.log("setInterval ok");
+        }
+
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(interval);
+            $('.btn').text(`FINISH! 恭喜獲得 ${counter * 100}分!`).css("background", "transparent").css("font-size", "50px").css("border", "none").css("width", "900px");
+
+            $(".row1, .row2").children().off("click");
+            $(".row").children().css("cursor", "default");
+            $(".row1, .row2").children().children().off("click");
+            $("#restart").on("click");
+
+            console.log($(".row1, .row2").children());
+            console.log($(".row1, .row2").children().children());
+
+            $("#restart").css("display", "inline-block")
+            $(".text").css("display", "none");
+            clearInterval(timeoutID);
+            clearInterval(timeoutID1);
+            clearInterval(timeoutID2);
+            clearInterval(timeoutID3);
+            clearInterval(timeoutID4);
+            clearInterval(timeoutID5);
+            clearInterval(timeoutID6);
+            clearInterval(timeoutID7);
+        }
+
+    //  $("#restart").click(function () {
+//             console.log("xxxx")
+
+//             timeoutID = setInterval((() => $(".cat").toggleClass('active')), 800);
+//             timeoutID1 = setInterval((() => $(".cat1").toggleClass('active')), 600);
+//             timeoutID2 = setInterval((() => $(".cat2").toggleClass('active')), 1000);
+//             timeoutID3 = setInterval((() => $(".cat3").toggleClass('active')), 1800);
+//             timeoutID4 = setInterval((() => $(".cat4").toggleClass('active')), 1000);
+//             timeoutID5 = setInterval((() => $(".cat5").toggleClass('active')), 1200);
+//             timeoutID6 = setInterval((() => $(".cat6").toggleClass('active')), 2600);
+//             timeoutID7 = setInterval((() => $(".cat7").toggleClass('active')), 1400);
+
+
+
+
+//         }
+
+
+
+
+
+// //分數重新計算、start again、游標
+
+
+    </script>
+
+
+
+
+</body>
+
+</html>

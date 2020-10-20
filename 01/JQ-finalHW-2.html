@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./imgs/jet.svg" type="image" />
+    <title>斯達沃爾 STAR WAR</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.14.0/css/all.css"
+      integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  </head>
+<link rel="stylesheet" href="./css/style.css">
+  <body>
+    <audio id="start-btn" controls hidden>
+        <source src="./sound/btn.wav" type="audio/wav">
+    </audio>
+    <audio id="bgm" loop controls hidden>
+        <source src="./sound/picopiconostalgie.mp3" type="audio/mp3" >
+    </audio>
+    <audio id="ast-explot" controls hidden>
+        <source src="./sound/ast-explot.mp3" type="audio/mp3" >
+    </audio>
+    <audio id="jet-explot" controls hidden>
+        <source src="./sound/jet-explot.mp3" type="audio/mp3" >
+    </audio>
+    <audio id="count-down" controls hidden>
+        <source src="./sound/robotic-countdown.wav" type="audio/wav" >
+    </audio>
+    <audio id="game-over-sound" controls hidden>
+        <source src="./sound/gameover.mp3" type="audio/mp3" >
+    </audio>
+    <div class="wrap">
+
+        <div class="game-over">
+        <img src="./imgs/gameover.png" alt="">
+        <button class="start-again">再來一場</button>
+        </div>
+
+        <div class="game-cover">
+            <h1>斯達沃爾</h1>
+            <h2>STAR WAR</h2>
+            <p>create by Ruby Hsieh</p>
+            <img src="./imgs/jet.svg" alt="">
+            <button type="button" class="start-btn">開始遊戲</button>
+        </div>
+
+        <div class="box">
+        <div class="jet">
+            <img src="./imgs/jet.svg" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="position-screen">
+        <div class="info-container">
+            <span>子彈數:</span>
+            <span class="bullet-count">10</span>
+        </div>
+        
+        <div class="info-container">
+            <span>分數:</span>
+            <span class="point" style="color:red;">0</span>
+        </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./js/all.js"></script>
+  </body>
+</html>

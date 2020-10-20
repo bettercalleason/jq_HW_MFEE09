@@ -1,0 +1,7 @@
+控制參考：
+
+http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
+
+
+技能飛行：
+https://stackoverflow.com/questions/3057162/moving-an-image-across-a-html-canvas

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Puzzle Game</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      body {
+        background-color: whitesmoke;
+      }
+
+      #dvPuzzle {
+        width: 480px;
+        height: 480px;
+        padding: 0px;
+        margin: 0 auto;
+        margin-bottom: 10px;
+      }
+
+      #example {
+        width: 480px;
+        height: 480px;
+        padding: 0px;
+        margin-bottom: 10px;
+      }
+
+      .section {
+        width: 119px;
+        height: 119px;
+        border: solid 0.5px brown;
+        float: left;
+        overflow: hidden;
+      }
+
+      h4 {
+        color: brown;
+        margin-bottom: 20px;
+        margin-top: 50px;
+        text-align: center;
+        font-size: 36px;
+      }
+
+      .btn {
+        background-color: rgb(223, 178, 95);
+      }
+
+      .box1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12"><h4>Puzzle Game</h4></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="box0">
+            <div id="example"></div>
+            <h6>遊戲說明: 用滑鼠點擊或拖曳完成拼圖</h6>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box1">
+            <div id="dvPuzzle"></div>
+            <button class="btn">shuffle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      $("#example").append("<img src='01.jpg' />");
+      $(function () {
+        let woodPin = {};
+        for (let i = 0; i < 16; i++) {
+          $("#dvPuzzle").append(
+            "<div class='section' id='Pic" + i + "'><img src='01.jpg' /></div>"
+          );
+
+          let row = parseInt(i / 4);
+          let col = i % 4;
+          $("#Pic" + i + " img")
+            .css("margin-left", col * -120 + 1)
+            .css("margin-top", row * -120 + 1);
+          woodPin[i] = { row: row, col: col };
+        }
+        $("#Pic0 img").remove();
+
+        function getNearPos(i) {
+          let pool = [];
+          let row = woodPin[i].row,
+            col = woodPin[i].col;
+          if (row > 0) pool.push((row - 1) * 4 + col);
+          if (row < 4) pool.push((row + 1) * 4 + col);
+          if (col > 0) pool.push(i - 1);
+          if (col < 4) pool.push(i + 1);
+          return pool;
+        }
+
+        $(".section").click(function () {
+          let cells = $("#dvPuzzle div");
+          let i = cells.index(this);
+          let toCheck = getNearPos(i);
+          while (toCheck.length > 0) {
+            let j = toCheck.pop();
+            if (cells.eq(j).attr("id") == "Pic0") {
+              if (i > j) {
+                let k = j;
+                j = i;
+                i = k;
+              }
+              let ahead = cells.eq(i);
+              let behind = cells.eq(j);
+              let behindPrev = behind.prev();
+              if (Math.abs(i - j) == 1) behind.after(ahead);
+              else {
+                ahead.after(behind);
+                behindPrev.after(ahead);
+              }
+              break;
+            }
+          }
+        });
+
+        $(".section").mousedown(function () {
+          let cells = $("#dvPuzzle div");
+          let i = cells.index(this);
+          let toCheck = getNearPos(i);
+          while (toCheck.length > 0) {
+            let j = toCheck.pop();
+            if (cells.eq(j).attr("id") == "Pic0") {
+              if (i > j) {
+                let k = j;
+                j = i;
+                i = k;
+              }
+              let ahead = cells.eq(i);
+              let behind = cells.eq(j);
+              let behindPrev = behind.prev();
+              if (Math.abs(i - j) == 1) behind.after(ahead);
+              else {
+                ahead.after(behind);
+                behindPrev.after(ahead);
+              }
+              break;
+            }
+          }
+        });
+
+        $("button").click(function () {
+          for (let i = 0; i < 500; i++) {
+            let cells = $("#dvPuzzle div");
+            let toMove = getNearPos(cells.index($("#Pic0")[0]));
+            cells.eq(toMove[parseInt(Math.random() * toMove.length)]).click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

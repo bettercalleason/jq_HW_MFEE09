@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>連連看</title>
+    <style>
+        div {
+            text-align: center;
+        }
+
+        .bigbox {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .box {
+            background-color: rgba(170, 173, 173, 0.247);
+            width: 100px;
+            height: 100px;
+            padding: 0;
+            margin: 1px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        span {
+            display: block;
+            width: 100px;
+            height: 100px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <input type="button" id="btnStart" value="重新開始" />
+    </div>
+
+    </div>
+    <hr>
+    <div class="container" id="gameBox">
+        <div class="row justify-content-center">
+            <div class="box" id="Txt0">
+                <span id="TTxt0"></span>
+            </div>
+            <div class="box" id="Txt1">
+                <span id="TTxt1"></span>
+            </div>
+            <div class="box" id="Txt2">
+                <span id="TTxt2"></span>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="box" id="Txt3">
+                <span id="TTxt3"></span>
+            </div>
+            <div class="box" id="Txt4">
+                <span id="TTxt4"></span>
+            </div>
+            <div class="box" id="Txt5">
+                <span id="TTxt5"></span>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="box" id="Txt6">
+                <span id="TTxt6"></span>
+            </div>
+            <div class="box" id="Txt7">
+                <span id="TTxt7"></span>
+            </div>
+            <div class="box" id="Txt8">
+                <span id="TTxt8"></span>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            let isGameOver = false;
+            let isO = true;
+            let WinGroup = [[0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]];
+
+            function initButtons() {
+                isGameOver = false;
+                isO = true;
+                $(".box").children().text('').css({ "background-color": "lightpink", "font-size": "60px", "font-weight": "bold" });
+            }
+
+            $("#btnStart").click(function () {
+                initButtons();
+            });
+
+            $(".box").click(function () {
+                let thisid = "#" + this.id;
+                console.log(thisid);
+                if (isGameOver) {
+                    alert("遊戲結束!");
+                    return;
+                }
+                if ($(thisid).children().text() != '') {
+                    alert("這個按鍵已經選擇了，請點選其他位置！");
+                    return;
+                }
+                if (isO)
+                    $(thisid).children().text("O").css({ "background-color": "red" });
+                else
+                    $(thisid).children().text("X").css({ "background-color": "#cfcf11" });
+                isO = !isO;
+
+                let GameStatus = CheckWinGroup();
+                isGameOver = GameStatus[1];
+
+                if (GameStatus[0]) {
+                    alert("遊戲結束!\r\n" + $(thisid).children().text() + " 獲勝");
+                    return;
+                }
+
+                if (GameStatus[1]) {
+                    alert("遊戲結束!\r\n已和局", "遊戲結束");
+                }
+            });
+
+            function CheckWinGroup() {
+                let gameWinOver = [false, false];
+                let btnIsUse = 1;
+                for (let i = 0; i < 8; i++) {
+                    let a = WinGroup[i][0];
+                    let b = WinGroup[i][1];
+                    let c = WinGroup[i][2];
+                    let b1 = "#" + $(".box").eq(a).children()[0].id;
+                    let b2 = "#" + $(".box").eq(b).children()[0].id;
+                    let b3 = "#" + $(".box").eq(c).children()[0].id;
+
+                    if ($(b1).text() == "" || $(b2).text() == "" || $(b3).text() == "")
+                        continue;
+
+                    if ($(b1).text() == $(b2).text() && $(b2).text() == $(b3).text()) {
+                        $(b1 + ", " + b2 + ", " + b3).css({ "background-color": "#1b9580", "font-size": "65px", "font-weight": "bold"});
+                        gameWinOver = [true, true];
+                        break;
+                    }
+
+                    if ($(".box").eq(i).children().text() != "") {
+                        btnIsUse++;
+                        gameWinOver[1] = (btnIsUse == 9) ? true : false;
+                    }
+                }
+                return gameWinOver;
+            }
+
+            initButtons();
+
+
+
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>絕命懸崖</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link rel="stylesheet" href="./fontawesome/css/all.css" />
+    <style>
+      body {
+        font-family: Helvetica, sans-serif;
+        font-weight: 800;
+        text-align: center;
+        color: darkslategray;
+      }
+      span {
+        color: rgb(103, 177, 177);
+      }
+      .bg {
+        position: relative;
+        background: url(./img/cliff.jpg);
+        background-size: cover;
+        width: 80vw;
+        height: 80vh;
+        margin: 35px auto 0;
+        overflow: hidden;
+      }
+      .peo {
+        position: absolute;
+        top: 315px;
+        left: 20px;
+        background-image: url(./img/p-02.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 120px;
+        height: 180px;
+        cursor: pointer;
+        /* transition: 0.2s; */ /*人物卡住*/
+      }
+      .control-box {
+        position: relative;
+        /* background-color: #ccc; */
+        width: 80vw;
+        height: 10vh;
+        margin: 0 auto;
+      }
+
+      /*控制*/
+      .overBg {
+        width: 80vw;
+        height: 80vh;
+        background-color: #000;
+        opacity: 0.6;
+        margin: 35px auto 0;
+      }
+      .peo2 {
+        /* position: absolute;
+        top: 215px;
+        left: 20px; */
+        background-image: url(./img/p-03.png);
+        /*用background-image 可只更改image*/
+        /* background-size: contain;
+        background-repeat: no-repeat; */
+        /* width: 120px;
+        height: 180px; */
+        /* cursor: pointer; */
+      }
+
+      .out {
+        transform: rotate(1080deg);
+        transition: 1.2s;
+        top: 800px;
+        left: 1200px;
+      }
+      .reset {
+        position: absolute;
+        top: 215px;
+        left: 20px;
+      }
+
+      .voice,
+      .voice2 {
+        visibility: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bg">
+      <div class="peo"></div>
+    </div>
+    <div class="voice">
+      <audio id="myAudio">
+        <source src="./img/yisell_sound_2.mp3" type="audio/ogg" />
+      </audio>
+
+      <!-- <button onclick="playAudio()" type="button">Play Audio</button>
+      <button onclick="pauseAudio()" type="button">Pause Audio</button> 
+    測試音效按鈕-->
+    </div>
+    <div class="voice2">
+      <audio id="myAudio2">
+        <source src="./img/yisell_sound_foot.mp3" />
+      </audio>
+      <button onclick="playAudio2()" type="button">Play Audio</button>
+    </div>
+    <div class="control-box">
+      <p>
+        Open &nbsp<i class="fas fa-volume-up"> </i>&nbsp first &nbsp&nbsp Press
+        " <span>Space</span> " to reset &nbsp&&nbsp Press "
+        <span
+          ><i class="fas fa-arrow-circle-left">&nbsp</i
+          ><i class="fas fa-arrow-circle-right"></i
+        ></span>
+        " to start
+      </p>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      let voice = document.querySelector("#myAudio");
+      let voice2 = document.querySelector("#myAudio2");
+      function playAudio() {
+        voice.play();
+      }
+      function pauseAudio() {
+        voice.pause();
+      }
+      function playAudio2() {
+        voice2.play();
+      }
+
+      $(".peo").click(function () {
+        $(".peo").css("left", "+=90");
+      });
+
+      let move = 20;
+
+      $(window).on("keydown", function (e) {
+        let step = e.which;
+        let newPosition = parseInt($(".peo").css("left"));
+        if (step == 32) {
+          // $(".peo").css("left", "20px").css("top", "215px");
+          $(".peo").css("left", "20px");
+          $(".peo").removeClass("out");
+        }
+
+        if (step == 39) {
+          if (newPosition < 1100) {
+            console.log("left", $(".peo").css("left"));
+            $(".peo").toggleClass("peo2"); //切換兩種class造成跑步效果
+            $(".peo").css("left", "+=" + move + "px");
+            playAudio2();
+            // $(".peo2").css("left", "+=" + move + "vw");
+          }
+          if (newPosition > 750) {
+            $(".peo").css("left", "+=300");
+            //不知所云的一行，可改噴飛角度 ,"+=1000"
+            $(".peo").addClass("out");
+            playAudio();
+          }
+        }
+        if (step == 37) {
+          if (newPosition > 10) {
+            $(".peo").toggleClass("peo2");
+            $(".peo").css("left", "-=" + move + "px");
+            playAudio2();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

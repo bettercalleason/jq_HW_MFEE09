@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAT PUSH</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        * {
+            /* outline: 1px solid #000; */
+        }
+
+        .wrap {
+            position: relative;
+            width: 800px;
+            height: 400px;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .table {
+            position: absolute;
+            top: 260px;
+            left: 0px;
+            width: 600px;
+            height: 60px;
+            background-color: rgb(241, 147, 85);
+            border-radius: 10px 10px 10px 10px;
+
+        }
+
+        .table_foot_a {
+            position: absolute;
+            top: 320px;
+            left: 50px;
+            width: 50px;
+            height: 80px;
+            background-color: rgb(241, 147, 85);
+        }
+
+        .table_foot_b {
+            position: absolute;
+            top: 320px;
+            left: 500px;
+            width: 50px;
+            height: 80px;
+            background-color: rgb(241, 147, 85);
+        }
+
+        .cup {
+            position: absolute;
+            top: 140px;
+            left: 240px;
+            width: 120px;
+            height: 120px;
+            background-color: rgb(255, 247, 228);
+            border-radius: 5px 5px 30px 30px;
+        }
+
+        .cup_ear {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 120px;
+            height: 80px;
+            border-radius: 60px;
+            border: 15px solid rgb(255, 247, 228);
+            transform: rotate(-40deg);
+        }
+
+        .box {
+            position: absolute;
+            top: 140px;
+            left: 40px;
+            width: 120px;
+            height: 120px;
+
+        }
+
+        .turn-left {
+            transform: scaleX(-1);
+        }
+
+        /* .origin_position */
+
+        .catgrass {
+            position: absolute;
+            top: 140px;
+            left: 140px;
+            width: 120px;
+            height: 120px;
+            /* background-color: lightblue; */
+        }
+
+        #block {
+            display: inline-block;
+            background-color: #fff;
+            /* border: 1px solid black; */
+            width: 30px;
+            height: 20px;
+        }
+
+        .talk {
+            width: 50px;
+            background-color: #ffffff;
+            /* color: #fff;  */
+            padding: 10px 0px 10px 10px;
+            border-radius: 6px;
+            position: absolute;
+            left: 55px;
+            top: -60px;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        .talk::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 25%;
+            /* margin-left: -5px; */
+            border-width: 12px;
+            border-style: solid;
+            border-color: #ffffff transparent transparent;
+        }
+
+        .heart {
+            width: 30px;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .color-select {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            margin-top: 50px;
+        }
+
+
+
+        .circle-button {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            margin-top: 50px;
+        }
+
+        #orangewhite {
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgb(233, 233, 233);
+        }
+
+        .white_circle {
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+        }
+
+        #trible {
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgb(233, 233, 233);
+        }
+
+        .orange_circle {
+            width: 50px;
+            height: 50px;
+            background-color: orange;
+            position: absolute;
+            left: 25px;
+            top: -20px;
+        }
+
+        .black_circle {
+            width: 50px;
+            height: 50px;
+            background-color: rgb(83, 83, 83);
+            position: absolute;
+            left: -25px;
+            top: -20px;
+        }
+
+        .mute-select {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            margin-top: 50px;
+            background-color: rgb(238, 237, 237);
+        }
+
+        .mute-select:hover {
+            background-color: rgb(212, 212, 212);
+        }
+
+        .volume {
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap  mx-auto">
+
+        <!-- 貓草
+        <div class="catgrass">
+            <img src="./img/catgrass.svg" alt="">
+        </div> -->
+
+        <!-- 桌子 -->
+        <div class="table"></div>
+        <div class="table_foot_a"></div>
+        <div class="table_foot_b"></div>
+
+        <!-- 杯子 -->
+        <div class="cup">
+            <div class="cup_ear"></div>
+        </div>
+
+
+
+        <!-- 貓 -->
+        <div class="box">
+            <!-- 對話框 -->
+            <div class="talk animate__animated animate__wobble hidden">
+                <!-- 愛心 -->
+                <img class="heart" src="./img/heart.svg" alt="">
+            </div>
+            <!-- 貓圖 -->
+            <img id="cat" src="./img/triblecat.svg" alt="">
+        </div>
+    </div>
+
+    <div class="container d-flex flex-wrap justify-content-center">
+        <div class=" d-flex flex-wrap">
+            <!-- 改變貓咪外觀 -->
+            <div class="color-select-area d-flex">
+                <!-- 灰貓 -->
+                <div class="color-select rounded-circle" id="gray" style="background: rgb(161, 161, 161);"></div>
+                <!-- 橘背白肚 -->
+                <div class="color-select rounded-circle" id="orangewhite" style="background: orange;">
+                    <div class="white_circle rounded-circle"></div>
+                </div>
+                <!-- 三花 -->
+                <div class="color-select rounded-circle" id="trible"
+                    style="background: whitesmoke;border:1px solid lightgray">
+                    <div class="orange_circle rounded-circle"></div>
+                    <div class="black_circle rounded-circle"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 方向鍵 -->
+        <div class="py-3 col-3 text-center">
+            <!-- 上 -->
+            <div class="py-1">
+                <button class="btn btn-info" id="up">
+                    <i class="fas fa-caret-up"></i>
+                </button>
+            </div>
+
+            <div>
+                <!-- 左 -->
+                <button class="btn btn-info" id="left">
+                    <i class="fas fa-caret-left"></i>
+                </button>
+                <!-- 中 -->
+                <!-- <div id="block"></div> -->
+                <button class="origin_position btn btn-info">●</button>
+                <!-- 右 -->
+                <button class="btn btn-info" id="right">
+                    <i class="fas fa-caret-right"></i>
+                </button>
+            </div>
+            <!-- 下 -->
+            <div class="py-1">
+                <button class="btn btn-info" id="down">
+                    <i class="fas fa-caret-down"></i>
+                </button>
+            </div>
+
+        </div>
+        <div class=" d-flex flex-wrap">
+            <!-- 改變貓咪外觀 -->
+            <div class="color-select-area d-flex">
+                <!-- 黑貓 -->
+                <div class="color-select rounded-circle" id="black" style="background: rgb(70, 70, 70);"></div>
+                <!-- 橘貓 -->
+                <div class="color-select rounded-circle" id="orange" style="background: orange;"></div>
+                <!-- 白貓 -->
+                <div class="color-select rounded-circle" id="white"
+                    style="background: whitesmoke;border:1px solid lightgray"></div>
+
+                <!-- 靜音  -->
+                <div class="mute-select rounded-circle d-flex justify-content-center align-items-center"><i
+                        class="fas volume fa-volume-off"></i></div>
+
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+
+        // 設定移動速度(越小越慢快)
+        let move_speed = 20;
+        // 設定移動距離(亂改會超出邊界QQ)
+        let move_distance = 20;
+
+        // 給Interval一個null
+        let timeoutID = null;
+
+        // 沒法簡化大於小於
+        // function less(boundary) { newMove < boundary }
+        // function more(boundary) { newMove > boundary }
+
+        // setInterval
+        function setIntervalLess(position, boundary, add_or_minus) {
+            if (timeoutID == null) {
+                timeoutID = window.setInterval((() => {
+                    let newMove = parseInt($(".box").css(position));
+                    if (newMove < boundary) {
+                        $(".box").css(position, `${add_or_minus}=${move_distance}`);
+                    }
+                }), move_speed);
+            }
+        }
+        function setIntervalMore(position, boundary, add_or_minus) {
+            if (timeoutID == null) {
+                timeoutID = window.setInterval((() => {
+                    let newMove = parseInt($(".box").css(position));
+                    if (newMove > boundary) {
+                        $(".box").css(position, `${add_or_minus}=${move_distance}`);
+                    }
+                }), move_speed);
+            }
+        }
+        // setIntervalMore、setIntervalLess函式使用規則提示
+        // setInt(position,boundary,add_or_minus)
+        // setInt('座標方向',邊界,'+'或'-'')
+        // 方向：上：'top',下：'top',左：'left',右：'left'
+        // 邊界：上：0,下：280,左：0,右：680
+        // +或-：上：-,下：+,左：-,右：+
+        // 小於：setIntervalLess,大於setIntervalMore
+
+        // QQ沒法簡化放外面
+        // let left_move = setIntervalMore('left',0,'-');
+        // let up_move = setIntervalMore('top',0,'-');
+        // let right_move =  setIntervalLess('left',680,'+');
+        // let down_move = setIntervalLess('top',280,'+');
+
+        //clearInterval        
+        function clear() {
+            window.clearInterval(timeoutID);
+            timeoutID = null
+        };
+
+        // 控制方向：鍵盤
+        $(document).on("keydown", function (e) {
+            // console.log("event:", e);
+            let code = e.which;
+            // 左37 上38 右39 下40
+            if (code === 37) { setIntervalMore('left', 0, '-'); $('.box').addClass('turn-left'); } //圖片左轉
+            // else if (code === 38) setIntervalMore('top', 0, '-');
+            else if (code === 39) { setIntervalLess('left', 490, '+'); $('.box').removeClass('turn-left'); }//圖片右轉
+            // else if (code === 40) setIntervalLess('top', 280, '+');
+        });
+        $(document).on("keyup", function (e) {
+            // console.log("event:", e);
+            let code = e.which;
+            // 左37 上38 右39 下40
+            if (code === 37) clear();
+            else if (code === 38) clear();
+            else if (code === 39) clear();
+            else if (code === 40) clear();
+        });
+
+        // 控制方向：滑鼠
+        // 上
+        // $('#up').mousedown(function () { setIntervalMore('top', 0, '-'); })
+        // $('#up').mouseup(function () { clear(); })
+
+        // 下
+        // $('#down').mousedown(function () { setIntervalLess('top', 280, '+'); })
+        // $('#down').mouseup(function () { clear(); })
+
+        // 左
+        $('#left').mousedown(function () { setIntervalMore('left', 0, '-'); })
+        // 圖片左轉
+        $('#left').mousedown(function () { $('.box').addClass('turn-left'); })
+        $('#left').mouseup(function () { clear(); })
+
+        // 右
+        $('#right').mousedown(function () { setIntervalLess('left', 490, '+'); })
+        // 圖片右轉
+        $('#right').mousedown(function () { $('.box').removeClass('turn-left'); })
+        $('#right').mouseup(function () { clear(); })
+
+
+        // 一鍵復原位置
+        // 滑鼠：：按鈕
+        $('.origin_position').click(function () {
+            $('.box').css('top', 140).css('left', 40);
+            $('.cup').css('top', 140).css('left', 240);
+        })
+
+
+        // 鍵盤：空白鍵
+        $(document).on("keydown", function (e) {
+            let code = e.which;
+            if (code === 13 || code === 32) { $('.box').css('top', 140).css('left', 40); $('.cup').css('top', 140).css('left', 240); }
+        });
+
+        // 換貓咪顏色
+        $('.color-select').click(function () {
+            let cat_color = $(this).attr('id')
+            $('#cat').attr('src', `./img/${cat_color}cat.svg`)
+        })
+
+
+
+        // 範圍效果：碰到貓草 → 1.顯示愛心
+        // let cat = $('.box');
+        let catgrass = $('.catgrass');
+
+        // 1.顯示愛心
+        // let timeoutID1 = window.setInterval((() => {
+        //     if (collision(cat, catgrass)) {
+        //         $(".talk").removeClass('hidden');
+        //     } else {
+        //         $(".talk").addClass('hidden');
+        //     }
+        // }), move_speed);
+
+        // 循環撥放talk動畫
+        let my_interval = setInterval(() => {
+            $(".talk").addClass('animate__wobble').one('animationend', function () {
+                $(this).removeClass('animate__wobble');
+            });
+        }, 10);
+
+        function collision($div1, $div2) {
+            var x1 = $div1.offset().left;
+            var y1 = $div1.offset().top;
+            var h1 = $div1.outerHeight(true);
+            var w1 = $div1.outerWidth(true);
+            var b1 = y1 + h1;
+            var r1 = x1 + w1;
+            var x2 = $div2.offset().left;
+            var y2 = $div2.offset().top;
+            var h2 = $div2.outerHeight(true);
+            var w2 = $div2.outerWidth(true);
+            var b2 = y2 + h2;
+            var r2 = x2 + w2;
+
+            if (b1 < y2 || y1 > b2 || r1 < x2 || x1 > r2) return false;
+            return true;
+        }
+
+        // 推杯子
+        let cat = $('.box');
+        let cup = $('.cup');
+        let timeoutID4 = window.setInterval((() => {
+            if (collision(cat, cup)) {
+                $(".cup").css('left', `+=${move_distance}`);
+                if ($('.volume').hasClass('fa-volume-off')) {
+                    if (collision(cat, cup)) {
+                        let cat_audio = new Audio('./audio/cat3a.mp3');
+                        // cat_audio.play();
+                    }
+                }
+            }
+        }), move_speed);
+
+        // 杯子掉落
+        let w2 = $('.table').outerWidth(true);
+        let x2 = $('.table').offset().left
+        let r2 = x2 + w2;
+        // console.log(w2)
+        // console.log(x2)
+        // console.log(r2)
+
+        // && $('.cup').offset().top <= 500
+        let timeoutID5 = window.setInterval((() => {
+            if ($('.cup').offset().left >= r2) {
+                $(".cup").css('top', `+=15`);
+            };
+        }), move_speed);
+
+        let timeoutID6 = window.setInterval((() => {
+            if ($('.cup').offset().left == r2) {
+                if ($('.volume').hasClass('fa-volume-off')) {
+                    console.log($(this))
+                    let break_audio = new Audio('http://sxl.yinxiao.org/sxshare/sesf1708281118520/freesound/soundeffects_52177181506102357452733318.mp3');
+                    break_audio.play();
+
+                }
+            };
+        }), 2000);
+
+
+
+        // 靜音切換
+        $('.mute-select').click(function () {
+            $('.volume').toggleClass('fa-volume-off')
+            $('.volume').toggleClass('fa-volume-mute')
+        })
+
+        // 推杯
+        // 隨機罐罐
+        // 餵食罐罐
+
+
+
+
+    </script>
+</body>
+
+</html>

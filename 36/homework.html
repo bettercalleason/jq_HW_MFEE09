@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+    <style>
+        .draw_area {
+            width: 800px;
+            height: 400px;
+            border: 1px solid #000;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .box {
+            width: 50px;
+            height: 50px;
+            /* background-color: brown; */
+            border: 1px solid gray;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 3;
+
+        }
+
+
+        .color {
+            margin: 0 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .orange {
+            background-color: orange;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+
+        .purple {
+            background-color: purple;
+        }
+
+        .white {
+            background-color: white;
+            border: 1px solid black;
+        }
+
+        .black {
+            background-color: black;
+        }
+
+        .color_active {
+            border: 2px solid black;
+        }
+
+        .btn {
+            /* background-color: antiquewhite; */
+            border-radius: 50%;
+            background-color: cornflowerblue;
+            border: 1px solid #bbb;
+        }
+
+        .btn i {
+            color: white;
+        }
+
+        .btn_f, .btn_d {
+            background-color: cornflowerblue;
+        }
+
+        .fillbox1 {
+            width: 50px;
+            height: 50px;
+            /* background-color: pink; */
+            position: absolute;
+            /* top: 50px;
+            left: 50px; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="draw_area">
+                <div class="box"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex mx-auto color_group">
+                <div id="red" class="color red"></div>
+                <div id="orange" class="color orange"></div>
+                <div id="yellow" class="color yellow"></div>
+                <div id="green" class="color green"></div>
+                <div id="blue" class="color blue"></div>
+                <div id="purple" class="color purple"></div>
+                <div id="purple" class="color white"></div>
+                <div id="purple" class="color black"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="controls_group py-3 mx-auto">
+                <div class="text-center">
+                    <button class="btn" id="up"><i class="fas fa-caret-up"></i></button>
+                </div>
+                <div class="py-1  text-center">
+                    <button class="btn mx-3" id="left"><i class="fas fa-caret-left"></i></button>
+                    <button class="btn mx-3" id="right"><i class="fas fa-caret-right"></i></button>
+                </div>
+                <div class="text-center">
+                    <button class="btn" id="down"><i class="fas fa-caret-down"></i></button>
+                </div>
+                <div class="text-center py-4">
+                    <button class="btn_f">填色</button>
+                    <button class="btn_d">清空</button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script>
+        //滑鼠點擊
+        console.log($(".box").css("top"));
+        $("#up").click(function () {
+            if (parseInt($(".box").css("top")) >= 50) {
+                $(".box").css("top", "-=50")
+            }
+        });
+        $("#down").click(function () {
+            if (parseInt($(".box").css("top")) <= 400 - 75) {
+                $(".box").css("top", "+=50")
+            }
+        });
+        $("#left").click(function () {
+            if (parseInt($(".box").css("left")) >= 50) {
+                $(".box").css("left", "-=50")
+            }
+        });
+        $("#right").click(function () {
+            if (parseInt($(".box").css("left")) <= 800 - 75) {
+                $(".box").css("left", "+=50")
+            }
+        });
+
+        $(".color").click(function () {
+            let color = $(this).css("background")
+            $(".box").css("background", color)
+        });
+
+        //鍵盤事件
+        $(document).on("keydown", function (e) {
+            let code = e.which;
+
+            //左37 上38 右39 下40
+            if (code === 37) {
+                if (parseInt($(".box").css("left")) >= 50) {
+                    $(".box").css("left", "-=50")
+                }
+            } else if (code === 38) {
+                $(".box").css("top", "-=50")
+            } else if (code === 39) {
+                if (parseInt($(".box").css("left")) <= 800 - 75) {
+                    $(".box").css("left", "+=50")
+                }
+            } else if (code === 40) {
+                if (parseInt($(".box").css("top")) <= 400 - 75) {
+                    $(".box").css("top", "+=50")
+                }
+            } else if (code === 32) {
+                let box_left = parseInt($(".box").css("left")) + "px"
+                let box_top = parseInt($(".box").css("top")) + "px"
+                let box_color = $(".box").css("background")
+                let fillbox = `<div class="fillbox1" style="left:${box_left};top:${box_top};background:${box_color}"></div>`
+                $(".box").after(fillbox);
+            }
+        });
+        //
+        let i = 1
+
+
+        $(".btn_f").click(function () {
+            let box_left = parseInt($(".box").css("left")) + "px"
+            let box_top = parseInt($(".box").css("top")) + "px"
+            let box_color = $(".box").css("background")
+            let fillbox = `<div class="fillbox1" style="left:${box_left};top:${box_top};background:${box_color}"></div>`
+            $(".box").after(fillbox);
+            // i++;
+
+        });
+        $(".btn_d").click(function(){
+            $(".fillbox1").remove();
+        })
+    </script>
+</body>
+
+</html>
